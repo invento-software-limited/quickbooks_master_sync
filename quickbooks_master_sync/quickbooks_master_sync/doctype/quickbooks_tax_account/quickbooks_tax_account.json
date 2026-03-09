@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-28 13:07:20.411625",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_frww",
+  "company",
+  "quickbooks_tax_id",
+  "unique_key",
+  "quickbooks_tax",
+  "column_break_1",
+  "tax_account",
+  "section_break_tax_rate",
+  "quickbooks_tax_rate_id",
+  "quickbooks_tax_rate_name",
+  "column_break_tax_rate",
+  "tax_rate",
+  "tax_rate_description",
+  "section_break_purchase_tax",
+  "quickbooks_purchase_tax_rate_id",
+  "quickbooks_purchase_tax_rate_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_frww",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Leave blank for global mapping across all companies, or select a company for company-specific tax account mapping",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "quickbooks_tax_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Quickbooks Tax Code ID",
+   "read_only": 1
+  },
+  {
+   "bold": 1,
+   "description": "Composite identifier: TAX_ID-COMPANY_ABBR (auto-generated)",
+   "fieldname": "unique_key",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Unique ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quickbooks_tax",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Quickbooks Tax Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "ERPNext Account",
+   "link_filters": "[[\"Account\",\"account_type\",\"in\",[\"Tax\",\"Expense Account\",\"Liability\",null]]]",
+   "options": "Account"
+  },
+  {
+   "fieldname": "section_break_tax_rate",
+   "fieldtype": "Section Break",
+   "label": "Tax Rate Details"
+  },
+  {
+   "fieldname": "quickbooks_tax_rate_id",
+   "fieldtype": "Data",
+   "label": "Quickbooks Tax Rate ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quickbooks_tax_rate_name",
+   "fieldtype": "Data",
+   "label": "Quickbooks Tax Rate Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tax_rate",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Tax Rate (%)",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_rate_description",
+   "fieldtype": "Small Text",
+   "label": "Tax Rate Description",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_purchase_tax",
+   "fieldtype": "Section Break",
+   "label": "Purchase Tax Rate Details (Optional)"
+  },
+  {
+   "fieldname": "quickbooks_purchase_tax_rate_id",
+   "fieldtype": "Data",
+   "label": "Quickbooks Purchase Tax Rate ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quickbooks_purchase_tax_rate_name",
+   "fieldtype": "Data",
+   "label": "Quickbooks Purchase Tax Rate Name",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-09 12:04:51.975100",
+ "modified_by": "Administrator",
+ "module": "Quickbooks Master Sync",
+ "name": "Quickbooks Tax Account",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

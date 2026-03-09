@@ -1,0 +1,27 @@
+{
+ "content": null,
+ "creation": "2025-01-01 12:00:00",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "fa fa-balance-scale",
+ "idx": 0,
+ "modified": "2026-03-09 13:13:44.651480",
+ "modified_by": "Administrator",
+ "module": "Quickbooks Master Sync",
+ "name": "quickbooks-balance-comparison",
+ "owner": "Administrator",
+ "page_name": "quickbooks-balance-comparison",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Accounts Manager"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "QuickBooks Balance Comparison"
+}

@@ -17,7 +17,7 @@ app_license = "mit"
 # 		"logo": "/assets/quickbooks_master_sync/logo.png",
 # 		"title": "Quickbooks Master Sync",
 # 		"route": "/quickbooks_master_sync",
-# 		"has_permission": "quickbooks_master_sync.api.permission.has_app_permission"
+# 		"has_permission": "quickbooks_master_sync.quickbooks_master_sync.api.permission.has_app_permission"
 # 	}
 # ]
 
@@ -75,8 +75,8 @@ app_license = "mit"
 
 # add methods and filters to jinja environment
 # jinja = {
-# 	"methods": "quickbooks_master_sync.utils.jinja_methods",
-# 	"filters": "quickbooks_master_sync.utils.jinja_filters"
+# 	"methods": "quickbooks_master_sync.quickbooks_master_sync.utils.jinja_methods",
+# 	"filters": "quickbooks_master_sync.quickbooks_master_sync.utils.jinja_filters"
 # }
 
 # Installation
@@ -96,16 +96,16 @@ app_license = "mit"
 # To set up dependencies/integrations with other apps
 # Name of the app being installed is passed as an argument
 
-# before_app_install = "quickbooks_master_sync.utils.before_app_install"
-# after_app_install = "quickbooks_master_sync.utils.after_app_install"
+# before_app_install = "quickbooks_master_sync.quickbooks_master_sync.utils.before_app_install"
+# after_app_install = "quickbooks_master_sync.quickbooks_master_sync.utils.after_app_install"
 
 # Integration Cleanup
 # -------------------
 # To clean up dependencies/integrations with other apps
 # Name of the app being uninstalled is passed as an argument
 
-# before_app_uninstall = "quickbooks_master_sync.utils.before_app_uninstall"
-# after_app_uninstall = "quickbooks_master_sync.utils.after_app_uninstall"
+# before_app_uninstall = "quickbooks_master_sync.quickbooks_master_sync.utils.before_app_uninstall"
+# after_app_uninstall = "quickbooks_master_sync.quickbooks_master_sync.utils.after_app_uninstall"
 
 # Desk Notifications
 # ------------------
@@ -129,11 +129,18 @@ app_license = "mit"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Company": "quickbooks_master_sync.quickbooks_master_sync.utils.hook_functions.company.CustomCompany",
+}
 
-# Document Events
+fixtures = [
+    {
+        "dt": "Workspace",
+        "filters": [
+            ["name", "in", ["Quickbook"]]
+        ]
+    }
+]
 # ---------------
 # Hook on document methods and events
 
@@ -196,13 +203,13 @@ app_license = "mit"
 
 # Request Events
 # ----------------
-# before_request = ["quickbooks_master_sync.utils.before_request"]
-# after_request = ["quickbooks_master_sync.utils.after_request"]
+# before_request = ["quickbooks_master_sync.quickbooks_master_sync.utils.before_request"]
+# after_request = ["quickbooks_master_sync.quickbooks_master_sync.utils.after_request"]
 
 # Job Events
 # ----------
-# before_job = ["quickbooks_master_sync.utils.before_job"]
-# after_job = ["quickbooks_master_sync.utils.after_job"]
+# before_job = ["quickbooks_master_sync.quickbooks_master_sync.utils.before_job"]
+# after_job = ["quickbooks_master_sync.quickbooks_master_sync.utils.after_job"]
 
 # User Data Protection
 # --------------------

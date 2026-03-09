@@ -1,0 +1,196 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2025-10-28 12:08:56.414584",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "enable_quickbooks_online",
+        "column_break_1",
+        "quickbooks_to_erpnext",
+        "section_break",
+        "consumer_key",
+        "connect_to_qb",
+        "column_break_3",
+        "consumer_secret",
+        "sandbox",
+        "enable_debug",
+        "section_break_company_settings",
+        "company_settings",
+        "section_break_2",
+        "taxes",
+        "section_break_3",
+        "authorize_url",
+        "request_token",
+        "request_token_secret",
+        "realm_id",
+        "access_token",
+        "access_token_secret",
+        "column_break_iosr",
+        "last_sync_datetime"
+    ],
+    "fields": [
+        {
+            "default": "0",
+            "fieldname": "enable_quickbooks_online",
+            "fieldtype": "Check",
+            "label": "Enable Quickbooks Online"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "0",
+            "description": "Sync From Quickbooks to ERPNext",
+            "fieldname": "quickbooks_to_erpnext",
+            "fieldtype": "Check",
+            "label": "Quickbooks to ERPNext"
+        },
+        {
+            "fieldname": "section_break",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "consumer_key",
+            "fieldtype": "Data",
+            "label": "Consumer key",
+            "no_copy": 1,
+            "print_hide": 1
+        },
+        {
+            "fieldname": "connect_to_qb",
+            "fieldtype": "Button",
+            "label": "Connect to Quickbooks",
+            "no_copy": 1,
+            "print_hide": 1
+        },
+        {
+            "fieldname": "column_break_3",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "consumer_secret",
+            "fieldtype": "Data",
+            "label": "Consumer Secret",
+            "no_copy": 1,
+            "print_hide": 1
+        },
+        {
+            "default": "1",
+            "description": "Enable for QuickBooks Sandbox, disable for Production",
+            "fieldname": "sandbox",
+            "fieldtype": "Check",
+            "label": "Sandbox Mode"
+        },
+        {
+            "default": "0",
+            "description": "Enable detailed debug logging. Debug logs will be saved to qb_debug_logs.json and can be viewed in QuickBooks Debug Viewer page.",
+            "fieldname": "enable_debug",
+            "fieldtype": "Check",
+            "label": "Enable Debug Logging"
+        },
+        {
+            "fieldname": "section_break_company_settings",
+            "fieldtype": "Section Break",
+            "label": "Company Settings"
+        },
+        {
+            "description": "Configure settings for each company. Add a row for each company you want to sync.",
+            "fieldname": "company_settings",
+            "fieldtype": "Table",
+            "options": "Quickbooks Company Settings"
+        },
+        {
+            "fieldname": "section_break_2",
+            "fieldtype": "Section Break",
+            "label": "Quickbooks Tax Account"
+        },
+        {
+            "fieldname": "taxes",
+            "fieldtype": "Table",
+            "options": "Quickbooks Tax Account"
+        },
+        {
+            "fieldname": "section_break_3",
+            "fieldtype": "Section Break",
+            "label": "Synchronize Data with Quickbooks"
+        },
+        {
+            "fieldname": "authorize_url",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Authorize Url",
+            "read_only": 1
+        },
+        {
+            "fieldname": "request_token",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Request Token",
+            "read_only": 1
+        },
+        {
+            "fieldname": "request_token_secret",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Request Token Secret",
+            "read_only": 1
+        },
+        {
+            "fieldname": "realm_id",
+            "fieldtype": "Int",
+            "hidden": 1,
+            "label": "Realm Id",
+            "read_only": 1
+        },
+        {
+            "fieldname": "access_token",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Access Token",
+            "read_only": 1
+        },
+        {
+            "fieldname": "access_token_secret",
+            "fieldtype": "Data",
+            "hidden": 1,
+            "label": "Access Token Secret",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_iosr",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "last_sync_datetime",
+            "fieldtype": "Datetime",
+            "label": "Last Sync Datetime",
+            "read_only": 1
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "issingle": 1,
+    "links": [],
+    "modified": "2026-03-09 10:46:00.000000",
+    "modified_by": "Administrator",
+    "module": "Quickbooks Master Sync",
+    "name": "Quickbooks Settings",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

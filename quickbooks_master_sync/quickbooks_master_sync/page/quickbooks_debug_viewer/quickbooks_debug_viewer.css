@@ -1,0 +1,57 @@
+.quickbooks-debug-viewer .filter-bar {
+    padding: 15px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #d1d8dd;
+    margin-bottom: 15px;
+}
+
+.quickbooks-debug-viewer .filter-bar .form-group {
+    margin-bottom: 0;
+}
+
+.quickbooks-debug-viewer .filter-bar label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.quickbooks-debug-viewer .filter-bar .form-control {
+    height: 30px;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+.quickbooks-debug-viewer .filter-bar .form-control:focus {
+    border-color: #5e64ff;
+    box-shadow: 0 0 0 0.2rem rgba(94, 100, 255, 0.25);
+}
+
+/* JSON Viewer Syntax Highlighting */
+.quickbooks-debug-viewer .json-viewer {
+    background: #2d2d2d !important;
+    color: #f8f8f2 !important;
+}
+
+.quickbooks-debug-viewer .json-viewer .json-key {
+    color: #f92672;
+    font-weight: 500;
+}
+
+.quickbooks-debug-viewer .json-viewer .json-string {
+    color: #a6e22e;
+}
+
+.quickbooks-debug-viewer .json-viewer .json-number {
+    color: #ae81ff;
+}
+
+.quickbooks-debug-viewer .json-viewer .json-boolean {
+    color: #66d9ef;
+    font-weight: 500;
+}
+
+.quickbooks-debug-viewer .json-viewer .json-null {
+    color: #75715e;
+    font-style: italic;
+}

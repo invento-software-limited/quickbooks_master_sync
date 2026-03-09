@@ -1,0 +1,182 @@
+.balance-comparison-container {
+	padding: 20px;
+	background-color: #fafbfc;
+}
+
+.page-header {
+	margin-bottom: 20px;
+}
+
+.page-header h3 {
+	margin: 0;
+}
+
+.summary-section {
+	margin: 20px 0;
+}
+
+.summary-cards .card {
+	border: 1px solid #ddd;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.summary-cards .card-body h4 {
+	margin: 0;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.tabs-container {
+	margin-top: 30px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 15px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tab-content {
+	padding: 20px 0;
+	background-color: #fff;
+	border-radius: 0 0 4px 4px;
+}
+
+/* Table Container Styling */
+#matched-table,
+#mismatched-table,
+#qb-only-table,
+#erp-only-table {
+	background-color: #fff;
+	border-radius: 4px;
+	overflow-x: auto;
+}
+
+/* Bootstrap Table Custom Styling */
+#matched-table table,
+#mismatched-table table,
+#qb-only-table table,
+#erp-only-table table {
+	width: 100%;
+	margin-bottom: 0;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+#matched-table table thead,
+#mismatched-table table thead,
+#qb-only-table table thead,
+#erp-only-table table thead {
+	background-color: #f8f9fa;
+}
+
+#matched-table table thead th,
+#mismatched-table table thead th,
+#qb-only-table table thead th,
+#erp-only-table table thead th {
+	background-color: #f8f9fa;
+	font-weight: 600;
+	font-size: 12px;
+	padding: 12px 15px;
+	border-bottom: 2px solid #dee2e6;
+	color: #495057;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	vertical-align: middle;
+}
+
+#matched-table table tbody tr,
+#mismatched-table table tbody tr,
+#qb-only-table table tbody tr,
+#erp-only-table table tbody tr {
+	border-bottom: 1px solid #e9ecef;
+	transition: background-color 0.2s ease;
+}
+
+#matched-table table tbody tr:hover,
+#mismatched-table table tbody tr:hover,
+#qb-only-table table tbody tr:hover,
+#erp-only-table table tbody tr:hover {
+	background-color: #f8f9fa;
+}
+
+#matched-table table tbody td,
+#mismatched-table table tbody td,
+#qb-only-table table tbody td,
+#erp-only-table table tbody td {
+	padding: 12px 15px;
+	font-size: 13px;
+	color: #212529;
+	vertical-align: middle;
+}
+
+/* Currency column alignment */
+#matched-table table thead th.text-right,
+#mismatched-table table thead th.text-right,
+#qb-only-table table thead th.text-right,
+#erp-only-table table thead th.text-right,
+#matched-table table tbody td.text-right,
+#mismatched-table table tbody td.text-right,
+#qb-only-table table tbody td.text-right,
+#erp-only-table table tbody td.text-right {
+	text-align: right;
+	padding-right: 20px;
+}
+
+/* Account name column - left align with better spacing */
+#matched-table table thead th:first-child,
+#mismatched-table table thead th:first-child,
+#qb-only-table table thead th:first-child,
+#erp-only-table table thead th:first-child,
+#matched-table table tbody td:first-child,
+#mismatched-table table tbody td:first-child,
+#qb-only-table table tbody td:first-child,
+#erp-only-table table tbody td:first-child {
+	padding-left: 20px;
+}
+
+/* Difference column styling for mismatched table */
+#mismatched-table table tbody td.text-danger {
+	font-weight: 600;
+	color: #dc3545;
+}
+
+/* Better spacing for table container */
+.tab-pane {
+	padding: 15px 0;
+}
+
+/* Responsive table styling */
+@media (max-width: 768px) {
+	.dt-scrollable {
+		font-size: 12px;
+	}
+	
+	.dt-scrollable thead th,
+	.dt-scrollable tbody td {
+		padding: 8px 10px !important;
+	}
+}
+
+.text-danger {
+	color: #dc3545 !important;
+	font-weight: 600;
+}
+
+.text-warning {
+	color: #ffc107 !important;
+}
+
+.text-success {
+	color: #28a745 !important;
+}
+
+.text-info {
+	color: #17a2b8 !important;
+}
+
+/* Account type column styling */
+.dt-scrollable tbody td:nth-child(5),
+.dt-scrollable tbody td:nth-child(6) {
+	font-size: 12px;
+	color: #6c757d;
+}
+
