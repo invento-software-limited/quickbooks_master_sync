@@ -30,7 +30,9 @@ def _get_quickbooks_company(quickbooks_obj=None, qb_company=None, section="sync_
 
 
 @frappe.whitelist()
-def sync_opening_balances(quickbooks_obj, cutoff_date=None, auto_submit=True):
+def sync_opening_balances(
+	quickbooks_obj: any, cutoff_date: str | None = None, auto_submit: bool | int | str = True
+):
 	"""
 	Sync opening balances from QuickBooks to ERPNext
 
@@ -175,7 +177,12 @@ def sync_opening_balances(quickbooks_obj, cutoff_date=None, auto_submit=True):
 
 
 @frappe.whitelist()
-def process_ar_opening_chunk(customer_list, qb_company=None, cutoff_date=None, auto_submit=False):
+def process_ar_opening_chunk(
+	customer_list: list | str,
+	qb_company: str | None = None,
+	cutoff_date: str | None = None,
+	auto_submit: bool | int | str = False,
+):
 	"""Background job to process a chunk of AR Opening Balances (Customers)"""
 	try:
 		from quickbooks_master_sync.quickbooks_master_sync.api import _create_quickbooks_client
@@ -631,7 +638,12 @@ def create_ar_opening_journal_entry(
 
 
 @frappe.whitelist()
-def process_ap_opening_chunk(vendor_list, qb_company=None, cutoff_date=None, auto_submit=False):
+def process_ap_opening_chunk(
+	vendor_list: list | str,
+	qb_company: str | None = None,
+	cutoff_date: str | None = None,
+	auto_submit: bool | int | str = False,
+):
 	"""Background job to process a chunk of AP Opening Balances (Vendors)"""
 	try:
 		from quickbooks_master_sync.quickbooks_master_sync.api import _create_quickbooks_client
@@ -1727,7 +1739,12 @@ def create_loan_opening_journal_entry(
 
 
 @frappe.whitelist()
-def process_inventory_opening_chunk(inventory_list, qb_company=None, cutoff_date=None, auto_submit=False):
+def process_inventory_opening_chunk(
+	inventory_list: list | str,
+	qb_company: str | None = None,
+	cutoff_date: str | None = None,
+	auto_submit: bool | int | str = False,
+):
 	"""Background job to process a chunk of Inventory Opening Balances (Items)"""
 	try:
 		from quickbooks_master_sync.quickbooks_master_sync.api import _create_quickbooks_client

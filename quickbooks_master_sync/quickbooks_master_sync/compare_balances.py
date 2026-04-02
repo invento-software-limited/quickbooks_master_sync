@@ -22,7 +22,9 @@ from .utils.logging import qb_log_error, qb_log_status
 
 
 @frappe.whitelist()
-def compare_account_balances(company_name=None, as_of_date=None, tolerance=0.01):
+def compare_account_balances(
+	company_name: str | None = None, as_of_date: str | None = None, tolerance: float = 0.01
+):
 	"""
 	Compare account balances between QuickBooks and ERPNext.
 
@@ -602,7 +604,12 @@ def _log_comparison_results(comparison, company_name, as_of_date):
 
 @frappe.whitelist()
 def compare_date_wise_balances(
-	company_name=None, start_date=None, end_date=None, erp_account=None, qb_id=None, tolerance=0.01
+	company_name: str | None = None,
+	start_date: str | None = None,
+	end_date: str | None = None,
+	erp_account: str | None = None,
+	qb_id: str | None = None,
+	tolerance: float = 0.01,
 ):
 	"""
 	Compare total daily debit and credit amounts between QuickBooks and ERPNext for a specific account.
@@ -874,7 +881,9 @@ def _compare_date_wise(erp_totals, qb_totals, tolerance=0.01):
 
 
 @frappe.whitelist()
-def compare_party_balances(party_type, company_name=None, as_of_date=None, tolerance=0.01):
+def compare_party_balances(
+	party_type: str, company_name: str | None = None, as_of_date: str | None = None, tolerance: float = 0.01
+):
 	"""
 	Compare balances for Customers or Suppliers between QuickBooks and ERPNext.
 	"""
@@ -1041,7 +1050,7 @@ def _compare_party_balances(qb_balances, erp_balances, tolerance, party_type):
 
 
 @frappe.whitelist()
-def get_daily_transactions_comparison(company_name, erp_account, qb_id, date):
+def get_daily_transactions_comparison(company_name: str, erp_account: str, qb_id: str, date: str):
 	"""Fetch daily transactions for side-by-side comparison in a dialog."""
 	if not company_name:
 		company_name = frappe.defaults.get_user_default("company")
@@ -1149,7 +1158,9 @@ def _fetch_quickbooks_daily_transactions(quickbooks_obj, qb_id, date):
 
 
 @frappe.whitelist()
-def get_quickbooks_journal_details(company_name, date, account_name, amount, qb_id=None):
+def get_quickbooks_journal_details(
+	company_name: str, date: str, account_name: str, amount: float, qb_id: str | None = None
+):
 	"""
 	Fetch the counterpart of a transaction from the QuickBooks Journal Report.
 	"""
@@ -1272,7 +1283,7 @@ def get_quickbooks_journal_details(company_name, date, account_name, amount, qb_
 
 
 @frappe.whitelist()
-def create_journal_entry_from_qb(rows, company_name):
+def create_journal_entry_from_qb(rows: str | list, company_name: str):
 	"""Create an ERPNext Journal Entry from QuickBooks Journal rows."""
 	if isinstance(rows, str):
 		import json

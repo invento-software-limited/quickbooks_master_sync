@@ -30,7 +30,12 @@ def _dbg(event, payload=None):
 
 
 @frappe.whitelist()
-def delete_company_data(company_name=None, dry_run=True, delete_company=False, clear_stock=False):
+def delete_company_data(
+	company_name: str | None = None,
+	dry_run: bool | int | str = True,
+	delete_company: bool | int | str = False,
+	clear_stock: bool | int | str = False,
+):
 	"""
 	Delete all QuickBooks synced data for a specific company.
 
@@ -1367,7 +1372,14 @@ def _delete_debug_log_files(company_name, stats, dry_run):
 				continue
 
 			filename_lower = filename.lower()
-			file_path = os.path.join(private_files_path, filename)
+			# Prevent directory traversal
+			safe_filename = os.path.basename(filename)
+			file_path = os.path.abspath(os.path.join(private_files_path, safe_filename))
+
+			# Verify path is within private_files_path
+			if not file_path.startswith(os.path.abspath(private_files_path)):
+				continue
+
 			should_delete = False
 
 			# Check if filename contains company abbreviation

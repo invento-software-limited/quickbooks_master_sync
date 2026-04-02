@@ -502,8 +502,15 @@ def save_qb_data_to_json(data, data_name, module_name=None, full_response=None):
 		# Save full response if provided (always replace single file, no timestamp)
 		# Format: qb_{company_abbr}_{data_name}_full_response.json
 		if full_response is not None:
-			full_response_filename = f"qb{company_suffix}_{data_name}_full_response.json"
-			full_response_path = os.path.join(private_files_path, full_response_filename)
+			# Prevent directory traversal by using basename
+			safe_data_name = os.path.basename(data_name).replace("/", "_").replace("\\", "_")
+			full_response_filename = f"qb{company_suffix}_{safe_data_name}_full_response.json"
+			full_response_path = os.path.abspath(os.path.join(private_files_path, full_response_filename))
+
+			# Verify path is within private_files_path
+			if not full_response_path.startswith(os.path.abspath(private_files_path)):
+				raise Exception(frappe._("Invalid file path: {0}").format(full_response_filename))
+
 			with open(full_response_path, "w", encoding="utf-8") as f:
 				json.dump(full_response, f, indent=2, ensure_ascii=False, default=str)
 			saved_files["full_response"] = full_response_filename

@@ -48,7 +48,7 @@ def get_company_from_filename(filename):
 
 
 @frappe.whitelist()
-def reconcile_debug_file_content(filename):
+def reconcile_debug_file_content(filename: str):
 	"""
 	Reconcile a QuickBooks debug file against ERPNext data.
 	"""
@@ -119,9 +119,21 @@ def reconcile_debug_file_content(filename):
 	return {"success": True, "results": results}
 
 
-def get_file_content(filename):
+def get_file_content(filename: str):
+	if not filename:
+		return None
+
+	# Prevent directory traversal by only using the basename
+	safe_filename = os.path.basename(filename)
+
 	site_path = get_site_path()
-	file_path = os.path.join(site_path, "private", "files", filename)
+	# Construct absolute path and verify it stays within the intended directory
+	base_path = os.path.abspath(os.path.join(site_path, "private", "files"))
+	file_path = os.path.abspath(os.path.join(base_path, safe_filename))
+
+	if not file_path.startswith(base_path):
+		frappe.throw(_("Invalid file access attempt: {0}").format(filename))
+
 	if not os.path.exists(file_path):
 		return None
 

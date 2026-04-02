@@ -144,9 +144,14 @@ def _save_debug_log_to_file(module: str, event: str, payload: dict[str, Any], co
 
 		# Create debug logs file name per module with company abbreviation
 		# Format: qb_debug_logs_{company_abbr}_{module}_full_response.json
-		debug_log_file = os.path.join(
-			private_files_path, f"qb_debug_logs{company_suffix}_{safe_module_name}_full_response.json"
+		safe_filename = os.path.basename(
+			f"qb_debug_logs{company_suffix}_{safe_module_name}_full_response.json"
 		)
+		debug_log_file = os.path.abspath(os.path.join(private_files_path, safe_filename))
+
+		# Verify path is within private_files_path
+		if not debug_log_file.startswith(os.path.abspath(private_files_path)):
+			return  # Safety check failed, skip logging
 
 		# Load existing logs or create new list
 		debug_logs = []

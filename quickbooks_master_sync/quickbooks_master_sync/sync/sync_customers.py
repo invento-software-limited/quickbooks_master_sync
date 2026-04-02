@@ -124,15 +124,10 @@ def sync_customers(quickbooks_obj):
 	# Log summary if there were failures
 	if stats.get("errors", 0) > 0:
 		failed_customers = stats.get("failed_customers", [])
-		error_msg = _(
-			"Customer sync completed with {0} error(s). "
-			"{1} customers failed to sync. "
-			"Please check the Activity Log for details."
-		).format(stats["errors"], stats["errors"])
-
-		if failed_customers:
-			failed_names = [cust.get("name", "Unknown") for cust in failed_customers[:10]]
-			error_msg += _("\n\nFailed customers (first 10): {0}").format(", ".join(failed_names))
+		failed_names = [cust.get("name", "Unknown") for cust in failed_customers[:10]]
+		error_msg = _("Customer sync completed with {0} errors.\n\nFailed customers (first 10): {1}").format(
+			stats["errors"], ", ".join(failed_names)
+		)
 
 		qb_log_error(
 			title=_("Customer Sync Completed with Errors"),
@@ -1589,7 +1584,7 @@ def get_quickbooks_customers_json(quickbooks_obj, include_addresses=True):
 
 
 @frappe.whitelist()
-def get_customers_json_api(source="erpnext", include_addresses=True):
+def get_customers_json_api(source: str = "erpnext", include_addresses: bool | str = True):
 	"""
 	API endpoint to get all customers as JSON.
 	Can be called via REST API or from Python.

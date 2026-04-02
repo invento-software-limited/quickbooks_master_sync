@@ -330,12 +330,12 @@ def _sync_resource_with_progress(resource_name, sync_function):
 
 @frappe.whitelist()
 def get_quickbooks_debug_files(
-	filename_filter=None,
-	data_type=None,
-	company_filter=None,
-	sort_by="modified",
-	sort_order="desc",
-	list_full_response_only=False,
+	filename_filter: str | None = None,
+	data_type: str | None = None,
+	company_filter: str | None = None,
+	sort_by: str = "modified",
+	sort_order: str = "desc",
+	list_full_response_only: bool = False,
 ):
 	"""
 	Get list of all QuickBooks debug JSON files with filtering and sorting options.
@@ -539,7 +539,7 @@ def get_quickbooks_debug_files(
 
 
 @frappe.whitelist()
-def get_quickbooks_debug_file_content(filename):
+def get_quickbooks_debug_file_content(filename: str):
 	"""
 	Get content of a specific QuickBooks debug JSON file.
 
@@ -566,7 +566,12 @@ def get_quickbooks_debug_file_content(filename):
 			frappe.throw(_("Invalid filename. Path traversal not allowed."))
 
 		site_path = get_site_path()
-		file_path = os.path.join(site_path, "private", "files", filename)
+		files_dir = os.path.abspath(os.path.join(site_path, "private", "files"))
+		file_path = os.path.abspath(os.path.join(files_dir, filename))
+
+		# Final safety check: ensure the resulting path is within the files_dir
+		if not file_path.startswith(files_dir):
+			frappe.throw(_("Invalid path. You can only access QuickBooks debug files."))
 
 		if not os.path.exists(file_path):
 			frappe.throw(_("File not found: {0}").format(filename))
@@ -713,7 +718,7 @@ def get_quickbooks_debug_file_content(filename):
 
 
 @frappe.whitelist()
-def delete_quickbooks_debug_file(filename):
+def delete_quickbooks_debug_file(filename: str):
 	"""
 	Delete a specific QuickBooks debug JSON file.
 
@@ -739,7 +744,12 @@ def delete_quickbooks_debug_file(filename):
 			frappe.throw(_("Invalid filename. Path traversal not allowed."))
 
 		site_path = get_site_path()
-		file_path = os.path.join(site_path, "private", "files", filename)
+		files_dir = os.path.abspath(os.path.join(site_path, "private", "files"))
+		file_path = os.path.abspath(os.path.join(files_dir, filename))
+
+		# Final safety check: ensure the resulting path is within the files_dir
+		if not file_path.startswith(files_dir):
+			frappe.throw(_("Invalid path. You can only delete QuickBooks debug files."))
 
 		if not os.path.exists(file_path):
 			frappe.throw(_("File not found: {0}").format(filename))
@@ -761,7 +771,7 @@ def delete_quickbooks_debug_file(filename):
 
 
 @frappe.whitelist()
-def clear_all_quickbooks_debug_files(company_filter=None):
+def clear_all_quickbooks_debug_files(company_filter: str | None = None):
 	"""
 	Delete all QuickBooks debug JSON and LOG files.
 	Optionally filter by company abbreviation.
@@ -849,7 +859,9 @@ from quickbooks_master_sync.quickbooks_master_sync.reconciliation import reconci
 
 
 @frappe.whitelist()
-def compare_quickbooks_erpnext_balances(company_name=None, as_of_date=None, tolerance=0.01):
+def compare_quickbooks_erpnext_balances(
+	company_name: str | None = None, as_of_date: str | None = None, tolerance: float = 0.01
+):
 	from quickbooks_master_sync.quickbooks_master_sync.compare_balances import compare_account_balances
 
 	try:
@@ -871,7 +883,9 @@ def compare_quickbooks_erpnext_balances(company_name=None, as_of_date=None, tole
 
 
 @frappe.whitelist()
-def compare_party_balances(party_type, company_name=None, as_of_date=None, tolerance=0.01):
+def compare_party_balances(
+	party_type: str, company_name: str | None = None, as_of_date: str | None = None, tolerance: float = 0.01
+):
 	from quickbooks_master_sync.quickbooks_master_sync.compare_balances import (
 		compare_party_balances as compare_parties,
 	)
@@ -895,7 +909,12 @@ def compare_party_balances(party_type, company_name=None, as_of_date=None, toler
 
 @frappe.whitelist()
 def compare_quickbooks_erpnext_date_wise_balances(
-	erp_account, qb_id, start_date, end_date, company_name=None, tolerance=0.01
+	erp_account: str,
+	qb_id: str,
+	start_date: str,
+	end_date: str,
+	company_name: str | None = None,
+	tolerance: float = 0.01,
 ):
 	from quickbooks_master_sync.quickbooks_master_sync.compare_balances import compare_account_date_wise
 

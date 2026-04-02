@@ -5,54 +5,6 @@ frappe.provide("frappe.ui.form");
 frappe.provide("Quickbooks Settings");
 
 frappe.ui.form.on("Quickbooks Settings", {
-	refresh: function (frm) {
-		var me = this;
-		var quickbooks_authentication_url = "";
-
-		// Add "Sync Data to Quickbooks" button at the top
-		if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
-			frm.add_custom_button(
-				__("Sync Data to Quickbooks"),
-				function () {
-					cur_frm.cscript.sync_data_to_qb(frm);
-				},
-				__("Actions")
-			);
-		}
-		// Add "Compare Balances" button
-		if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
-			frm.add_custom_button(
-				__("Compare Balances"),
-				function () {
-					cur_frm.cscript.balance_comparison();
-				},
-				__("Actions")
-			);
-		}
-
-		// Add "Delete Company Data" button
-		if (!frm.doc.__islocal) {
-			frm.add_custom_button(
-				__("Delete Company Data"),
-				function () {
-					show_delete_company_dialog();
-				},
-				__("Utilities")
-			);
-		}
-
-		// Add "Reconnect to QuickBooks" button if already connected
-
-		if (!frm.doc.__islocal && frm.doc.realm_id && frm.doc.realm_id != "") {
-			frm.add_custom_button(
-				__("Reconnect to QuickBooks"),
-				function () {
-					reconnect_to_quickbooks(frm);
-				},
-				__("Connection")
-			);
-		}
-	},
 	setup: function (frm) {
 		// Style all sync buttons
 		let sync_buttons = [
@@ -74,169 +26,264 @@ frappe.ui.form.on("Quickbooks Settings", {
 			}
 		});
 	},
-});
 
-// Set query filter for warehouse in company_settings child table
-if (cur_frm.fields_dict["company_settings"]) {
-	cur_frm.fields_dict["company_settings"].grid.get_field("warehouse").get_query = function (
-		doc,
-		cdt,
-		cdn
-	) {
-		let row = locals[cdt][cdn];
-		if (row.company) {
-			return {
-				filters: {
-					is_group: 0,
-					company: row.company,
+	refresh: function (frm) {
+		var me = this;
+		var quickbooks_authentication_url = "";
+
+		// Add "Sync Data to Quickbooks" button at the top
+		if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
+			frm.add_custom_button(
+				__("Sync Data to Quickbooks"),
+				function () {
+					frm.trigger("connect_to_qb");
 				},
+				__("Actions")
+			);
+		}
+
+		// Add "Compare Balances" button
+		if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
+			frm.add_custom_button(
+				__("Compare Balances"),
+				function () {
+					frm.trigger("balance_comparison");
+				},
+				__("Actions")
+			);
+		}
+
+		// Add "Delete Company Data" button
+		if (!frm.doc.__islocal) {
+			frm.add_custom_button(
+				__("Delete Company Data"),
+				function () {
+					show_delete_company_dialog(frm);
+				},
+				__("Utilities")
+			);
+		}
+
+		// Add "Reconnect to QuickBooks" button if already connected
+		if (!frm.doc.__islocal && frm.doc.realm_id && frm.doc.realm_id != "") {
+			frm.add_custom_button(
+				__("Reconnect to QuickBooks"),
+				function () {
+					reconnect_to_quickbooks(frm);
+				},
+				__("Connection")
+			);
+		}
+
+		// Set query filter for warehouse in company_settings child table
+		if (frm.fields_dict["company_settings"]) {
+			frm.fields_dict["company_settings"].grid.get_field("warehouse").get_query = function (
+				doc,
+				cdt,
+				cdn
+			) {
+				let row = locals[cdt][cdn];
+				if (row.company) {
+					return {
+						filters: {
+							is_group: 0,
+							company: row.company,
+						},
+					};
+				}
+				return {
+					filters: {
+						name: "",
+					},
+				};
 			};
 		}
-		return {
-			filters: {
-				name: "",
-			},
-		};
-	};
-}
+	},
 
-(cur_frm.cscript.connect_to_qb = function () {
-	var me = this;
-	if (
-		cur_frm.doc.consumer_key != null &&
-		cur_frm.doc.consumer_secret != null &&
-		cur_frm.doc.consumer_key.trim() != "" &&
-		cur_frm.doc.consumer_secret.trim() != ""
-	) {
-		return frappe.call({
-			method: "quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.quickbooks_authentication_popup",
-			args: {
-				consumer_key: cur_frm.doc.consumer_key,
-				consumer_secret: cur_frm.doc.consumer_secret,
-			},
-			freeze: true,
-			freeze_message: "Please wait.. connecting to Quickbooks ................",
-			callback: function (r) {
-				if (r.message) {
-					window.open(
-						decodeURIComponent(r.message),
-						"Quickbooks",
-						"width=800, height=600"
+	connect_to_qb: function (frm) {
+		if (
+			frm.doc.consumer_key != null &&
+			frm.doc.consumer_secret != null &&
+			frm.doc.consumer_key.trim() != "" &&
+			frm.doc.consumer_secret.trim() != ""
+		) {
+			return frappe.call({
+				method: "quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.quickbooks_authentication_popup",
+				args: {
+					consumer_key: frm.doc.consumer_key,
+					consumer_secret: frm.doc.consumer_secret,
+				},
+				freeze: true,
+				freeze_message: __("Please wait.. connecting to Quickbooks ................"),
+				callback: function (r) {
+					if (r.message) {
+						window.open(
+							decodeURIComponent(r.message),
+							"Quickbooks",
+							"width=800, height=600"
+						);
+					}
+				},
+			});
+		} else {
+			let warnings = [];
+			if (!frm.doc.company_settings || frm.doc.company_settings.length === 0) {
+				warnings.push(__("Company Settings (at least one company must be configured)"));
+			} else {
+				// Check if any company has required settings
+				let has_settings = false;
+				for (let row of frm.doc.company_settings || []) {
+					if (row.selling_price_list || row.buying_price_list) {
+						has_settings = true;
+						break;
+					}
+				}
+				if (!has_settings) {
+					warnings.push(
+						__(
+							"Price Lists (configure at least one company with Selling/Buying Price List)"
+						)
 					);
 				}
-			},
-		});
-	} else {
-		let warnings = [];
-		if (!cur_frm.doc.company_settings || cur_frm.doc.company_settings.length === 0) {
-			warnings.push("Company Settings (at least one company must be configured)");
-		} else {
-			// Check if any company has required settings
-			let has_settings = false;
-			for (let row of cur_frm.doc.company_settings || []) {
-				if (row.selling_price_list || row.buying_price_list) {
-					has_settings = true;
-					break;
-				}
 			}
-			if (!has_settings) {
-				warnings.push(
-					"Price Lists (configure at least one company with Selling/Buying Price List)"
-				);
-			}
-		}
 
-		let start_sync = function () {
-			// Create and show progress dialog
-			let progress_dialog = show_sync_progress_dialog();
+			let start_sync = function () {
+				// Create and show progress dialog
+				let progress_dialog = show_sync_progress_dialog();
 
-			// Listen for progress updates from backend
-			let progress_listener = frappe.realtime.on(
-				"quickbooks_sync_progress",
-				function (data) {
-					if (data && data.step) {
-						update_sync_progress(
-							data.step,
-							data.status || "running",
-							data.message || ""
-						);
-
-						// Close dialog when sync completes or fails
-						if (
-							data.status === "completed" ||
-							(data.step &&
-								(data.step === "Sync Completed" || data.step.includes("Failed")))
-						) {
-							setTimeout(
-								function () {
-									if (progress_dialog) {
-										progress_dialog.hide();
-									}
-									if (progress_listener) {
-										frappe.realtime.off(
-											"quickbooks_sync_progress",
-											progress_listener
-										);
-									}
-									if (
-										data.status === "completed" ||
-										data.step === "Sync Completed"
-									) {
-										frappe.show_alert(
-											{
-												message: __("Sync completed successfully!"),
-												indicator: "green",
-											},
-											5
-										);
-									} else {
-										frappe.msgprint({
-											title: __("Sync Error"),
-											message:
-												data.message ||
-												__("Sync failed. Please check the error log."),
-											indicator: "red",
-										});
-									}
-								},
-								data.status === "completed" ? 1500 : 1000
+				// Listen for progress updates from backend
+				let progress_listener = frappe.realtime.on(
+					"quickbooks_sync_progress",
+					function (data) {
+						if (data && data.step) {
+							update_sync_progress(
+								data.step,
+								data.status || "running",
+								data.message || ""
 							);
+
+							// Close dialog when sync completes or fails
+							if (
+								data.status === "completed" ||
+								(data.step &&
+									(data.step === "Sync Completed" ||
+										data.step.includes("Failed")))
+							) {
+								setTimeout(
+									function () {
+										if (progress_dialog) {
+											progress_dialog.hide();
+										}
+										if (progress_listener) {
+											frappe.realtime.off(
+												"quickbooks_sync_progress",
+												progress_listener
+											);
+										}
+										if (
+											data.status === "completed" ||
+											data.step === "Sync Completed"
+										) {
+											frappe.show_alert(
+												{
+													message: __("Sync completed successfully!"),
+													indicator: "green",
+												},
+												5
+											);
+										} else {
+											frappe.msgprint({
+												title: __("Sync Error"),
+												message:
+													data.message ||
+													__("Sync failed. Please check the error log."),
+												indicator: "red",
+											});
+										}
+									},
+									data.status === "completed" ? 1500 : 1000
+								);
+							}
 						}
 					}
-				}
-			);
+				);
 
-			// Start the sync with progress tracking
-			return frappe.call({
-				method: "quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_resources",
-				freeze: true,
-				freeze_message: __("Starting QuickBooks Sync..."),
-				callback: function (r) {
-					// Check if job was queued (background job)
-					if (r.message && r.message.job_queued === true) {
-						// Job is queued and running in background
-						// Keep progress dialog open and wait for real-time updates
+				// Start the sync with progress tracking
+				return frappe.call({
+					method: "quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_resources",
+					freeze: true,
+					freeze_message: __("Starting QuickBooks Sync..."),
+					callback: function (r) {
+						// Check if job was queued (background job)
+						if (r.message && r.message.job_queued === true) {
+							// Job is queued and running in background
+							// Keep progress dialog open and wait for real-time updates
+							update_sync_progress(
+								"Sync Queued",
+								"running",
+								__("Sync job queued and running in background...")
+							);
+							// Don't unsubscribe or close dialog - let real-time updates handle completion
+							return;
+						}
+
+						// If job was NOT queued (immediate execution or error)
+						// Unsubscribe from progress updates
+						if (progress_listener) {
+							frappe.realtime.off("quickbooks_sync_progress", progress_listener);
+						}
+
+						// Update final status
+						if (r.message && r.message.success === false) {
+							update_sync_progress(
+								"Sync Failed",
+								"error",
+								r.message.message || __("Sync failed")
+							);
+							setTimeout(function () {
+								if (progress_dialog) {
+									progress_dialog.hide();
+								}
+								frappe.msgprint({
+									title: __("Sync Error"),
+									message:
+										r.message.message ||
+										__("Sync failed. Please check the error log."),
+									indicator: "red",
+								});
+							}, 1000);
+						} else {
+							// Immediate completion (shouldn't happen with background jobs)
+							update_sync_progress(
+								"Sync Completed",
+								"completed",
+								__("All data synced successfully")
+							);
+							setTimeout(function () {
+								if (progress_dialog) {
+									progress_dialog.hide();
+								}
+								frappe.show_alert(
+									{
+										message: __("Sync completed successfully!"),
+										indicator: "green",
+									},
+									5
+								);
+							}, 1500);
+						}
+					},
+					error: function (r) {
+						// Unsubscribe from progress updates
+						if (progress_listener) {
+							frappe.realtime.off("quickbooks_sync_progress", progress_listener);
+						}
+
+						// Close progress dialog on error
 						update_sync_progress(
-							"Sync Queued",
-							"running",
-							"Sync job queued and running in background..."
-						);
-						// Don't unsubscribe or close dialog - let real-time updates handle completion
-						return;
-					}
-
-					// If job was NOT queued (immediate execution or error)
-					// Unsubscribe from progress updates
-					if (progress_listener) {
-						frappe.realtime.off("quickbooks_sync_progress", progress_listener);
-					}
-
-					// Update final status
-					if (r.message && r.message.success === false) {
-						update_sync_progress(
-							"Sync Failed",
+							"Sync Error",
 							"error",
-							r.message.message || "Sync failed"
+							__("An error occurred during sync")
 						);
 						setTimeout(function () {
 							if (progress_dialog) {
@@ -244,76 +291,193 @@ if (cur_frm.fields_dict["company_settings"]) {
 							}
 							frappe.msgprint({
 								title: __("Sync Error"),
-								message:
-									r.message.message ||
-									__("Sync failed. Please check the error log."),
+								message: __(
+									"An error occurred during sync. Please check the error log."
+								),
 								indicator: "red",
 							});
 						}, 1000);
-					} else {
-						// Immediate completion (shouldn't happen with background jobs)
-						update_sync_progress(
-							"Sync Completed",
-							"completed",
-							"All data synced successfully"
-						);
-						setTimeout(function () {
-							if (progress_dialog) {
-								progress_dialog.hide();
-							}
-							frappe.show_alert(
-								{
-									message: __("Sync completed successfully!"),
-									indicator: "green",
-								},
-								5
-							);
-						}, 1500);
-					}
-				},
-				error: function (r) {
-					// Unsubscribe from progress updates
-					if (progress_listener) {
-						frappe.realtime.off("quickbooks_sync_progress", progress_listener);
-					}
+					},
+				});
+			};
 
-					// Close progress dialog on error
-					update_sync_progress("Sync Error", "error", "An error occurred during sync");
-					setTimeout(function () {
-						if (progress_dialog) {
-							progress_dialog.hide();
-						}
-						frappe.msgprint({
-							title: __("Sync Error"),
-							message: __(
-								"An error occurred during sync. Please check the error log."
-							),
-							indicator: "red",
-						});
-					}, 1000);
-				},
-			});
-		};
-
-		if (warnings.length > 0) {
-			frappe.warn(
-				__("Missing Configuration"),
-				__(
-					"The following fields are recommended but not configured: {0}. Sync may use fallback values. Continue?",
-					[warnings.join(", ")]
-				),
-				start_sync,
-				__("Continue"),
-				true
-			);
-		} else {
-			return start_sync();
+			if (warnings.length > 0) {
+				frappe.warn(
+					__("Missing Configuration"),
+					__(
+						"The following fields are recommended but not configured: {0}. Sync may use fallback values. Continue?",
+						[warnings.join(", ")]
+					),
+					start_sync,
+					__("Continue"),
+					true
+				);
+			} else {
+				return start_sync();
+			}
 		}
-	}
-}),
-	function (url, windowName) {
-		window.open(url, windowName, "width=800, height=600");
-	};
+	},
+
+	balance_comparison: function (frm) {
+		if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
+			show_balance_comparison_dialog(frm);
+		} else {
+			frappe.msgprint(__("Enable QuickBooks Online and save the settings first."));
+		}
+	},
+
+	customer_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_customers_only",
+			__("Customer")
+		);
+	},
+
+	fixed_asset_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_fixed_assets_only",
+			__("Fixed Asset")
+		);
+	},
+
+	account_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_accounts_only",
+			__("Account")
+		);
+	},
+
+	employee_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_employees_only",
+			__("Employee")
+		);
+	},
+
+	supplier_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_suppliers_only",
+			__("Supplier")
+		);
+	},
+
+	product_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_products_only",
+			__("Product")
+		);
+	},
+
+	sales_invoice_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_sales_invoices_only",
+			__("Sales Invoice")
+		);
+	},
+
+	credit_memo_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_credit_memos_only",
+			__("Credit Memo")
+		);
+	},
+
+	vendor_credit_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_vendor_credits_only",
+			__("Vendor Credit")
+		);
+	},
+
+	purchase_invoice_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_purchase_invoices_only",
+			__("Purchase Invoice")
+		);
+	},
+
+	payment_entry_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_payment_entries_only",
+			__("Payment Entry")
+		);
+	},
+
+	payment_method_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_payment_methods_only",
+			__("Payment Method")
+		);
+	},
+
+	journal_entry_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_journal_entries_only",
+			__("Journal Entry")
+		);
+	},
+
+	deposits_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_deposits_only",
+			__("Deposit")
+		);
+	},
+
+	transfers_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_transfers_only",
+			__("Transfer")
+		);
+	},
+
+	credit_card_payment_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_credit_card_payments_only",
+			__("Credit Card Payment")
+		);
+	},
+
+	refund_receipt_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_refund_receipts_only",
+			__("Refund Receipt")
+		);
+	},
+
+	sales_receipt_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_sales_receipts_only",
+			__("Sales Receipt")
+		);
+	},
+
+	inventory_adjustment_sync: function (frm) {
+		return _start_sync_with_progress(
+			frm,
+			"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_inventory_adjustments_only",
+			__("Inventory Adjustment")
+		);
+	},
+});
 
 // Show sync progress dialog
 function show_sync_progress_dialog() {
@@ -451,22 +615,9 @@ function update_sync_progress(step_name, status, message) {
 	container.scrollTop(container[0].scrollHeight);
 }
 
-// Add handler for Customer Sync button
-cur_frm.cscript.customer_sync = function () {
-	if (!cur_frm.doc.__islocal && cur_frm.doc.enable_quickbooks_online === 1) {
-		return frappe.call({
-			method: "quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_customers_only",
-			freeze: true,
-			freeze_message: "Starting Customer Sync...",
-		});
-	} else {
-		frappe.msgprint(__("Enable QuickBooks Online and save the settings first."));
-	}
-};
-
 // Generic function to start individual sync with progress tracking
-function _start_sync_with_progress(method, resource_name) {
-	if (!cur_frm.doc.__islocal && cur_frm.doc.enable_quickbooks_online === 1) {
+function _start_sync_with_progress(frm, method, resource_name) {
+	if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
 		// Create and show progress dialog
 		let progress_dialog = show_sync_progress_dialog();
 
@@ -530,7 +681,7 @@ function _start_sync_with_progress(method, resource_name) {
 					update_sync_progress(
 						"Sync Failed",
 						"error",
-						r.message.message || "Sync failed"
+						r.message.message || __("Sync failed")
 					);
 					setTimeout(function () {
 						if (progress_dialog) {
@@ -572,7 +723,7 @@ function _start_sync_with_progress(method, resource_name) {
 				}
 
 				// Close progress dialog on error
-				update_sync_progress("Sync Error", "error", "An error occurred during sync");
+				update_sync_progress("Sync Error", "error", __("An error occurred during sync"));
 				setTimeout(function () {
 					if (progress_dialog) {
 						progress_dialog.hide();
@@ -590,158 +741,7 @@ function _start_sync_with_progress(method, resource_name) {
 	}
 }
 
-// Legacy function for backward compatibility (not used anymore)
-function _start_call(method, freeze_msg) {
-	return frappe.call({
-		method,
-		freeze: true,
-		freeze_message: freeze_msg,
-	});
-}
-
-// cur_frm.cscript.company_sync = function () {
-// 	return _start_sync_with_progress("quickbooks_master_sync.quickbooks_master_sync.api.company", "Company");
-// };
-
-// cur_frm.cscript.opening_balance_sync = function () {
-// 	return _start_sync_with_progress("quickbooks_master_sync.quickbooks_master_sync.api.opening_balance", "Opening Balance");
-// };
-
-cur_frm.cscript.fixed_asset_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_fixed_assets_only",
-		"Fixed Asset"
-	);
-};
-
-cur_frm.cscript.account_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_accounts_only",
-		"Account"
-	);
-};
-
-cur_frm.cscript.employee_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_employees_only",
-		"Employee"
-	);
-};
-
-cur_frm.cscript.supplier_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_suppliers_only",
-		"Supplier"
-	);
-};
-
-cur_frm.cscript.product_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_products_only",
-		"Product"
-	);
-};
-
-cur_frm.cscript.sales_invoice_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_sales_invoices_only",
-		"Sales Invoice"
-	);
-};
-
-cur_frm.cscript.credit_memo_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_credit_memos_only",
-		"Credit Memo"
-	);
-};
-
-cur_frm.cscript.vendor_credit_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_vendor_credits_only",
-		"Vendor Credit"
-	);
-};
-
-cur_frm.cscript.purchase_invoice_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_purchase_invoices_only",
-		"Purchase Invoice"
-	);
-};
-
-cur_frm.cscript.payment_entry_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_payment_entries_only",
-		"Payment Entry"
-	);
-};
-
-cur_frm.cscript.payment_method_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_payment_methods_only",
-		"Payment Method"
-	);
-};
-
-cur_frm.cscript.journal_entry_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_journal_entries_only",
-		"Journal Entry"
-	);
-};
-
-cur_frm.cscript.deposits_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_deposits_only",
-		"Deposit"
-	);
-};
-
-cur_frm.cscript.transfers_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_transfers_only",
-		"Transfer"
-	);
-};
-
-cur_frm.cscript.credit_card_payment_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_credit_card_payments_only",
-		"Credit Card Payment"
-	);
-};
-
-cur_frm.cscript.refund_receipt_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_refund_receipts_only",
-		"Refund Receipt"
-	);
-};
-
-cur_frm.cscript.sales_receipt_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_sales_receipts_only",
-		"Sales Receipt"
-	);
-};
-
-cur_frm.cscript.balance_comparison = function () {
-	if (!cur_frm.doc.__islocal && cur_frm.doc.enable_quickbooks_online === 1) {
-		show_balance_comparison_dialog();
-	} else {
-		frappe.msgprint(__("Enable QuickBooks Online and save the settings first."));
-	}
-};
-
-cur_frm.cscript.inventory_adjustment_sync = function () {
-	return _start_sync_with_progress(
-		"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_inventory_adjustments_only",
-		"Inventory Adjustment"
-	);
-};
-
-function show_balance_comparison_dialog() {
+function show_balance_comparison_dialog(frm) {
 	let d = new frappe.ui.Dialog({
 		title: __("Compare QuickBooks & ERPNext Balances"),
 		fields: [
@@ -849,98 +849,92 @@ function run_balance_comparison(company, as_of_date, tolerance, dialog) {
 
 // Reconnect to QuickBooks - Clear current connection and reconnect
 function reconnect_to_quickbooks(frm) {
-	frappe.confirm(
-		__(
-			"Are you sure you want to disconnect from the current QuickBooks company and reconnect?<br><br>" +
-				"<strong>Current Connection:</strong><br>" +
-				"Realm ID: {0}<br><br>" +
-				"This will clear your current connection. You will need to authorize again with QuickBooks to connect to a different company.",
-			[frm.doc.realm_id || "N/A"]
-		),
-		function () {
-			// User confirmed - clear connection
-			frappe.call({
-				method: "quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.clear_quickbooks_connection",
-				freeze: true,
-				freeze_message: __("Clearing current connection..."),
-				callback: function (r) {
-					if (r.message && r.message.status === "success") {
-						frappe.show_alert(
-							{
-								message: __(
-									"Connection cleared successfully. Please reconnect now."
-								),
-								indicator: "green",
-							},
-							5
-						);
-
-						// Reload the form to show cleared fields
-						frm.reload_doc();
-
-						// After a short delay, trigger the connection process
-						setTimeout(function () {
-							if (
-								frm.doc.consumer_key != null &&
-								frm.doc.consumer_secret != null &&
-								frm.doc.consumer_key.trim() != "" &&
-								frm.doc.consumer_secret.trim() != ""
-							) {
-								frappe.confirm(
-									__(
-										"Connection cleared. Do you want to connect to QuickBooks now?<br><br>You will be able to select a different company."
-									),
-									function () {
-										// Trigger the connection with force_company_selection=true
-										// This forces QuickBooks to show the company selection screen
-										frappe.call({
-											method: "quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.quickbooks_authentication_popup",
-											args: {
-												consumer_key: frm.doc.consumer_key,
-												consumer_secret: frm.doc.consumer_secret,
-												force_company_selection: true,
-											},
-											freeze: true,
-											freeze_message: __(
-												"Please wait.. connecting to Quickbooks ................"
-											),
-											callback: function (r) {
-												if (r.message) {
-													window.open(
-														decodeURIComponent(r.message),
-														"Quickbooks",
-														"width=800, height=600"
-													);
-												}
-											},
-										});
-									}
-								);
-							} else {
-								frappe.msgprint({
-									title: __("Ready to Connect"),
-									message: __(
-										"Connection cleared. Please enter your Consumer Key and Consumer Secret, then click 'Connect to QuickBooks' to reconnect."
-									),
-									indicator: "blue",
-								});
-							}
-						}, 1000);
-					} else {
-						frappe.msgprint({
-							title: __("Error"),
-							message: __("Failed to clear connection. Please try again."),
-							indicator: "red",
-						});
-					}
-				},
-			});
-		}
+	const confirm_msg = __(
+		"Are you sure you want to disconnect from the current QuickBooks company and reconnect?<br><br><strong>Current Connection:</strong><br>Realm ID: {0}<br><br>This will clear your current connection. You will need to authorize again with QuickBooks to connect to a different company.",
+		[frm.doc.realm_id || "N/A"]
 	);
+
+	frappe.confirm(confirm_msg, function () {
+		// User confirmed - clear connection
+		frappe.call({
+			method: "quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.clear_quickbooks_connection",
+			freeze: true,
+			freeze_message: __("Clearing current connection..."),
+			callback: function (r) {
+				if (r.message && r.message.status === "success") {
+					frappe.show_alert(
+						{
+							message: __("Connection cleared successfully. Please reconnect now."),
+							indicator: "green",
+						},
+						5
+					);
+
+					// Reload the form to show cleared fields
+					frm.reload_doc();
+
+					// After a short delay, trigger the connection process
+					setTimeout(function () {
+						if (
+							frm.doc.consumer_key != null &&
+							frm.doc.consumer_secret != null &&
+							frm.doc.consumer_key.trim() != "" &&
+							frm.doc.consumer_secret.trim() != ""
+						) {
+							frappe.confirm(
+								__(
+									"Connection cleared. Do you want to connect to QuickBooks now?<br><br>You will be able to select a different company."
+								),
+								function () {
+									// Trigger the connection with force_company_selection=true
+									// This forces QuickBooks to show the company selection screen
+									frappe.call({
+										method: "quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.quickbooks_authentication_popup",
+										args: {
+											consumer_key: frm.doc.consumer_key,
+											consumer_secret: frm.doc.consumer_secret,
+											force_company_selection: true,
+										},
+										freeze: true,
+										freeze_message: __(
+											"Please wait.. connecting to Quickbooks ................"
+										),
+										callback: function (r) {
+											if (r.message) {
+												window.open(
+													decodeURIComponent(r.message),
+													"Quickbooks",
+													"width=800, height=600"
+												);
+											}
+										},
+									});
+								}
+							);
+						} else {
+							frappe.msgprint({
+								title: __("Ready to Connect"),
+								message: __(
+									"Connection cleared. Please enter your Consumer Key and Consumer Secret, then click 'Connect to QuickBooks' to reconnect."
+								),
+								indicator: "blue",
+							});
+						}
+					}, 1000);
+				} else {
+					frappe.msgprint({
+						title: __("Error"),
+						message: __("Failed to clear connection. Please try again."),
+						indicator: "red",
+					});
+				}
+			},
+		});
+	});
 }
 
 // Delete Company Data Dialog
-function show_delete_company_dialog() {
+function show_delete_company_dialog(frm) {
 	// Get session default company
 	let default_company = frappe.defaults.get_user_default("company");
 
@@ -1143,7 +1137,7 @@ function show_delete_company_dialog() {
 }
 
 function run_delete_company_data(company, dry_run, delete_company, clear_stock, dialog) {
-	let action_text = dry_run ? "Preview" : "Delete";
+	let action_text = dry_run ? __("Preview") : __("Delete");
 
 	frappe.call({
 		method: "quickbooks_master_sync.quickbooks_master_sync.delete_company_data.delete_company_data",
@@ -1180,7 +1174,7 @@ function run_delete_company_data(company, dry_run, delete_company, clear_stock, 
 					<thead>
 						<tr>
 							<th>Document Type</th>
-							<th class="text-right">Records ${dry_run ? "to Delete" : "Deleted"}</th>
+							<th class="text-right">Records ${dry_run ? __("to Delete") : __("Deleted")}</th>
 						</tr>
 					</thead>
 					<tbody>`;

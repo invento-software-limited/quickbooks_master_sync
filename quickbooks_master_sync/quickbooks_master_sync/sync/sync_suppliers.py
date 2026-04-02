@@ -74,15 +74,10 @@ def sync_suppliers(quickbooks_obj):
 	# Log summary if there were failures
 	if stats.get("errors", 0) > 0:
 		failed_suppliers = stats.get("failed_suppliers", [])
-		error_msg = _(
-			"Supplier sync completed with {0} error(s). "
-			"{1} suppliers failed to sync. "
-			"Please check the Activity Log for details."
-		).format(stats["errors"], stats["errors"])
-
-		if failed_suppliers:
-			failed_names = [supp.get("name", "Unknown") for supp in failed_suppliers[:10]]
-			error_msg += _("\n\nFailed suppliers (first 10): {0}").format(", ".join(failed_names))
+		failed_names = [supp.get("name", "Unknown") for supp in failed_suppliers[:10]]
+		error_msg = _("Supplier sync completed with {0} errors.\n\nFailed suppliers (first 10): {1}").format(
+			stats["errors"], ", ".join(failed_names)
+		)
 
 		qb_log_error(
 			title=_("Supplier Sync Completed with Errors"),
@@ -1766,7 +1761,7 @@ def get_quickbooks_suppliers_json(quickbooks_obj, include_addresses=True):
 
 
 @frappe.whitelist()
-def get_suppliers_json_api(source="erpnext", include_addresses=True):
+def get_suppliers_json_api(source: str = "erpnext", include_addresses: bool | str = True):
 	"""
 	API endpoint to get all suppliers as JSON.
 	Can be called via REST API or from Python.

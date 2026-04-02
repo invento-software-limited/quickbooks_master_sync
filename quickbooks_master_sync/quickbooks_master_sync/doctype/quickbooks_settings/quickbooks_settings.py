@@ -24,7 +24,9 @@ class QuickbooksSettings(Document):
 
 
 @frappe.whitelist(allow_guest=True)
-def First_callback(realmId, oauth_verifier=None, code=None, state=None):
+def First_callback(
+	realmId: str, oauth_verifier: str | None = None, code: str | None = None, state: str | None = None
+):
 	"""OAuth 2.0 callback - accepts 'code' parameter from QuickBooks OAuth 2.0"""
 	# OAuth 2.0 uses 'code', OAuth 1.0 uses 'oauth_verifier' (for backward compatibility)
 	auth_code = code or oauth_verifier
@@ -96,7 +98,9 @@ def login_via_oauth2(realmId, auth_code):
 
 
 @frappe.whitelist(allow_guest=True)
-def quickbooks_authentication_popup(consumer_key, consumer_secret, force_company_selection=False):
+def quickbooks_authentication_popup(
+	consumer_key: str, consumer_secret: str, force_company_selection: bool | str = False
+):
 	"""
 	Open new popup window to Connect Quickbooks App to Quickbooks sandbox Account
 
