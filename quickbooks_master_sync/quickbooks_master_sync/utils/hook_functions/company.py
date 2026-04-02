@@ -1,5 +1,6 @@
 from erpnext.setup.doctype.company.company import Company
 
+
 class CustomCompany(Company):
 	def create_default_accounts(self):
 		if not self.flags.from_quickbooks:
