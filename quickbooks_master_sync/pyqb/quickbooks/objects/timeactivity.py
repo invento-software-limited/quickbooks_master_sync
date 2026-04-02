@@ -1,47 +1,49 @@
 from six import python_2_unicode_compatible
-from .base import Ref, QuickbooksManagedObject, QuickbooksTransactionEntity, LinkedTxnMixin, AttachableRef
+
+from .base import AttachableRef, LinkedTxnMixin, QuickbooksManagedObject, QuickbooksTransactionEntity, Ref
 
 
 @python_2_unicode_compatible
 class TimeActivity(QuickbooksManagedObject, QuickbooksTransactionEntity, LinkedTxnMixin):
-    """
-    QBO definition: The TimeActivity entity represents a record of time worked by a vendor or employee.
-    """
-    class_dict = {
-        "VendorRef": Ref,
-        "CustomerRef": Ref,
-        "DepartmentRef": Ref,
-        "EmployeeRef": Ref,
-        "ItemRef": Ref,
-        "ClassRef": Ref,
-        "AttachableRef": AttachableRef
-    }
+	"""
+	QBO definition: The TimeActivity entity represents a record of time worked by a vendor or employee.
+	"""
 
-    qbo_object_name = "TimeActivity"
+	class_dict = {
+		"VendorRef": Ref,
+		"CustomerRef": Ref,
+		"DepartmentRef": Ref,
+		"EmployeeRef": Ref,
+		"ItemRef": Ref,
+		"ClassRef": Ref,
+		"AttachableRef": AttachableRef,
+	}
 
-    def __init__(self):
-        super(TimeActivity, self).__init__()
-        self.NameOf = ""
-        self.TimeZone = ""
-        self.TxnDate = ""
-        self.BillableStatus = ""
-        self.Taxable = False
-        self.HourlyRate = 0
-        self.Hours = 0
-        self.Minutes = 0
-        self.BreakHours = 0
-        self.BreakMinutes = 0
-        self.StartTime = ""
-        self.EndTime = ""
-        self.Description = ""
+	qbo_object_name = "TimeActivity"
 
-        self.VendorRef = None
-        self.CustomerRef = None
-        self.DepartmentRef = None
-        self.EmployeeRef = None
-        self.ItemRef = None
-        self.ClassRef = None
-        self.AttachableRef = None
+	def __init__(self):
+		super().__init__()
+		self.NameOf = ""
+		self.TimeZone = ""
+		self.TxnDate = ""
+		self.BillableStatus = ""
+		self.Taxable = False
+		self.HourlyRate = 0
+		self.Hours = 0
+		self.Minutes = 0
+		self.BreakHours = 0
+		self.BreakMinutes = 0
+		self.StartTime = ""
+		self.EndTime = ""
+		self.Description = ""
 
-    def __str__(self):
-        return self.NameOf
+		self.VendorRef = None
+		self.CustomerRef = None
+		self.DepartmentRef = None
+		self.EmployeeRef = None
+		self.ItemRef = None
+		self.ClassRef = None
+		self.AttachableRef = None
+
+	def __str__(self):
+		return self.NameOf

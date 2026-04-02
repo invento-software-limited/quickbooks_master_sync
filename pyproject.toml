@@ -46,6 +46,7 @@ ignore = [
     "F403", # can't detect undefined names from * import
     "F405", # can't detect undefined names from * import
     "F722", # syntax error in forward type annotation
+    "RUF012", # mutable class attributes - pyqb library uses this pattern deliberately
     "W191", # indentation contains tabs
 ]
 typing-modules = ["frappe.types.DF"]
@@ -54,3 +55,7 @@ typing-modules = ["frappe.types.DF"]
 quote-style = "double"
 indent-style = "tab"
 docstring-code-format = true
+
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<16.0.0"

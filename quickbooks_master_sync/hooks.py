@@ -133,14 +133,7 @@ override_doctype_class = {
 	"Company": "quickbooks_master_sync.quickbooks_master_sync.utils.hook_functions.company.CustomCompany",
 }
 
-fixtures = [
-    {
-        "dt": "Workspace",
-        "filters": [
-            ["name", "in", ["Quickbook"]]
-        ]
-    }
-]
+fixtures = [{"dt": "Workspace", "filters": [["name", "in", ["Quickbook"]]]}]
 # ---------------
 # Hook on document methods and events
 
@@ -253,4 +246,3 @@ fixtures = [
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

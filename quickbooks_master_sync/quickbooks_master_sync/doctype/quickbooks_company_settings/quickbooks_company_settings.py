@@ -1,7 +1,7 @@
 # Copyright (c) 2025, Invento Software Limited and contributors
 # For license information, please see license.txt
 
-from __future__ import unicode_literals
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -24,19 +24,15 @@ class QuickbooksCompanySettings(Document):
 			"parent": self.parent,
 			"parenttype": self.parenttype,
 			"company": self.company,
-			"name": ["!=", self.name]  # Exclude current row when updating
+			"name": ["!=", self.name],  # Exclude current row when updating
 		}
 
 		# Check if duplicate exists
-		existing = frappe.db.get_value(
-			"Quickbooks Company Settings",
-			filters,
-			"name"
-		)
+		existing = frappe.db.get_value("Quickbooks Company Settings", filters, "name")
 
 		if existing:
 			frappe.throw(
-				_("Company '{0}' already has settings configured. Please update the existing entry instead of creating a duplicate.").format(
-					self.company
-				)
+				_(
+					"Company '{0}' already has settings configured. Please update the existing entry instead of creating a duplicate."
+				).format(self.company)
 			)

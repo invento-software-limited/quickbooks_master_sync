@@ -1,29 +1,31 @@
 from six import python_2_unicode_compatible
-from .base import Ref, QuickbooksManagedObject, QuickbooksTransactionEntity, LinkedTxnMixin
+
+from .base import LinkedTxnMixin, QuickbooksManagedObject, QuickbooksTransactionEntity, Ref
 
 
 @python_2_unicode_compatible
 class Transfer(QuickbooksManagedObject, QuickbooksTransactionEntity, LinkedTxnMixin):
-    """
-    QBO definition: A Transfer represents a transaction where funds are moved between two accounts from the
-    company's QuickBooks chart of accounts.
-    """
-    class_dict = {
-        "FromAccountRef": Ref,
-        "ToAccountRef": Ref,
-    }
+	"""
+	QBO definition: A Transfer represents a transaction where funds are moved between two accounts from the
+	company's QuickBooks chart of accounts.
+	"""
 
-    qbo_object_name = "Transfer"
+	class_dict = {
+		"FromAccountRef": Ref,
+		"ToAccountRef": Ref,
+	}
 
-    def __init__(self):
-        super(Transfer, self).__init__()
-        self.Amount = 0
-        self.TxnDate = ""
-        self.PrivateNote = ""
-        self.TxnSource = ""
+	qbo_object_name = "Transfer"
 
-        self.FromAccountRef = None
-        self.ToAccountRef = None
+	def __init__(self):
+		super().__init__()
+		self.Amount = 0
+		self.TxnDate = ""
+		self.PrivateNote = ""
+		self.TxnSource = ""
 
-    def __str__(self):
-        return str(self.Amount)
+		self.FromAccountRef = None
+		self.ToAccountRef = None
+
+	def __str__(self):
+		return str(self.Amount)

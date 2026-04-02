@@ -1,7 +1,7 @@
 # Copyright (c) 2025, Invento Software Limited and contributors
 # For license information, please see license.txt
 
-from __future__ import unicode_literals
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -11,7 +11,7 @@ class QuickbooksTaxAccount(Document):
 	def before_save(self):
 		"""Ensure unique_key is always set before saving."""
 		self.set_unique_key()
-	
+
 	def validate(self):
 		"""Validate QuickBooks Tax Account mapping to prevent duplicates."""
 		self.validate_duplicate_mapping()
@@ -37,7 +37,7 @@ class QuickbooksTaxAccount(Document):
 			"parent": self.parent,
 			"parenttype": self.parenttype,
 			"quickbooks_tax_id": self.quickbooks_tax_id,
-			"name": ["!=", self.name]  # Exclude current row when updating
+			"name": ["!=", self.name],  # Exclude current row when updating
 		}
 
 		# Check for company-specific or global mapping duplicates
@@ -51,29 +51,31 @@ class QuickbooksTaxAccount(Document):
 			# For global mapping, check if another global mapping exists
 			# Check for both None and empty string
 			filters["company"] = ["in", [None, ""]]
-			error_msg = _("QuickBooks Tax ID '{0}' already has a global mapping (no company specified)").format(
-				self.quickbooks_tax_id
-			)
+			error_msg = _(
+				"QuickBooks Tax ID '{0}' already has a global mapping (no company specified)"
+			).format(self.quickbooks_tax_id)
 
 		# Check if duplicate exists
 		existing = frappe.db.get_value(
 			"Quickbooks Tax Account",
 			filters,
 			["name", "quickbooks_tax", "tax_account", "company"],
-			as_dict=True
+			as_dict=True,
 		)
 
 		if existing:
 			existing_company = existing.company or _("Global (all companies)")
 			frappe.throw(
-				_("{0}.<br><br>Existing mapping: <b>{1}</b> → <b>{2}</b> (Company: {3})<br><br>"
-				  "Please update the existing mapping instead of creating a duplicate.").format(
+				_(
+					"{0}.<br><br>Existing mapping: <b>{1}</b> → <b>{2}</b> (Company: {3})<br><br>"
+					"Please update the existing mapping instead of creating a duplicate."
+				).format(
 					error_msg,
 					existing.quickbooks_tax or self.quickbooks_tax_id,
 					existing.tax_account or "Not Set",
-					existing_company
+					existing_company,
 				),
-				title=_("Duplicate Tax Mapping")
+				title=_("Duplicate Tax Mapping"),
 			)
 
 	def set_unique_key(self):

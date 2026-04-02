@@ -1,0 +1,42 @@
+{
+ "cards": [
+  {
+   "card": "Errors Today"
+  },
+  {
+   "card": "Queued Syncs"
+  },
+  {
+   "card": "Successful Syncs Today"
+  },
+  {
+   "card": "Txns Balances Synced Today"
+  }
+ ],
+ "charts": [
+  {
+   "chart": "QB Error Trend",
+   "width": "Half"
+  },
+  {
+   "chart": "QB Sync Results by Method",
+   "width": "Half"
+  },
+  {
+   "chart": "QB Sync Volume Over Time",
+   "width": "Full"
+  }
+ ],
+ "creation": "2026-04-02 15:36:34.484487",
+ "dashboard_name": "QuickBooks Sync",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 1,
+ "is_standard": 1,
+ "modified": "2026-04-02 15:45:08.834954",
+ "modified_by": "Administrator",
+ "module": "Quickbooks Master Sync",
+ "name": "QuickBooks Sync",
+ "owner": "Administrator"
+}

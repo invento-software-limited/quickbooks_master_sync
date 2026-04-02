@@ -1,0 +1,81 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"1dRF4oX77i\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quickbook Migrations</span>\",\"col\":12}},{\"id\":\"spacer_main\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"LWNaKfGwNu\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Errors Today\",\"col\":4}},{\"id\":\"VhcQLzgj0x\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Queued Syncs\",\"col\":4}},{\"id\":\"bXv3Zqtunt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Successful Syncs Today\",\"col\":4}},{\"id\":\"g1Jr6XU_Vt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboard\",\"col\":3}},{\"id\":\"QOcPRUN7Oc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quickbooks Settings\",\"col\":3}},{\"id\":\"ihKsQWwyJz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quickbooks Log\",\"col\":3}},{\"id\":\"75RbPIjoLs\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quickbooks Debug Viewer\",\"col\":3}},{\"id\":\"qg_XvpJ0gt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quickbooks Balance Overview\",\"col\":3}}]",
+ "creation": "2026-04-02 14:58:30.948736",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "table",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Quickbook",
+ "links": [],
+ "modified": "2026-04-02 15:44:55.705091",
+ "modified_by": "Administrator",
+ "module": "Quickbooks Master Sync",
+ "name": "Quickbook",
+ "number_cards": [
+  {
+   "label": "Errors Today",
+   "number_card_name": "Errors Today"
+  },
+  {
+   "label": "Queued Syncs",
+   "number_card_name": "Queued Syncs"
+  },
+  {
+   "label": "Successful Syncs Today",
+   "number_card_name": "Successful Syncs Today"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 26.1,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Dashboard",
+   "link_to": "QuickBooks Sync",
+   "type": "Dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Quickbooks Settings",
+   "link_to": "Quickbooks Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Quickbooks Balance Overview",
+   "link_to": "QuickBooks Balance Overview",
+   "report_ref_doctype": "Quickbooks Settings",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Quickbooks Debug Viewer",
+   "link_to": "quickbooks-debug-viewer",
+   "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Quickbooks Log",
+   "link_to": "Quickbooks Log",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Quickbook"
+}
