@@ -11,15 +11,15 @@ app_license = "mit"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "quickbooks_master_sync",
-# 		"logo": "/assets/quickbooks_master_sync/logo.png",
-# 		"title": "Quickbooks Master Sync",
-# 		"route": "/quickbooks_master_sync",
-# 		"has_permission": "quickbooks_master_sync.quickbooks_master_sync.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "quickbooks_master_sync",
+		"logo": "/assets/quickbooks_master_sync/img/logo.png",
+		"title": "Quickbooks Master Sync",
+		"route": "/desk/dashboard-view/QuickBooks%20Sync",
+		# "has_permission": "quickbooks_master_sync.quickbooks_master_sync.api.permission.has_app_permission"
+	}
+]
 
 # Includes in <head>
 # ------------------
