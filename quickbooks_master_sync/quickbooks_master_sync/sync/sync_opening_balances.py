@@ -1804,16 +1804,11 @@ def sync_qb_inventory_opening_chunk(inventory_items, quickbooks_obj, company, cu
 
     # Try to get from Company settings (if custom field exists)
     try:
-        default_warehouse = frappe.db.get_value("Company", company, "default_warehouse")
-    except:
-        pass
-
-    # If not found, try Stock Settings
-    if not default_warehouse:
-        try:
-            default_warehouse = frappe.db.get_single_value("Stock Settings", "default_warehouse")
-        except:
-            pass
+        from ..utils.multi_company_utils import get_warehouse_for_company
+        default_warehouse = get_warehouse_for_company(company)
+    except Exception as e:
+        _dbg("sync_qb_inventory_opening_chunk:get_warehouse_error", {"error": str(e)})
+        default_warehouse = None
 
     # If still not found, get any non-group warehouse for this company
     if not default_warehouse:
