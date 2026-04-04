@@ -277,7 +277,7 @@ def _ensure_root_accounts(company):
 		# Rebuild tree to ensure Nested Set integrity after forced root creation
 		from frappe.utils.nestedset import rebuild_tree
 
-		rebuild_tree("Account", "parent_account")
+		rebuild_tree("Account")
 		frappe.db.commit()
 		_dbg("ensure_root_accounts:summary", {"created_count": len(created), "accounts": created})
 
@@ -379,7 +379,7 @@ def _ensure_root_cost_centers(company):
 	# Final tree rebuild to ensure integrity
 	from frappe.utils.nestedset import rebuild_tree
 
-	rebuild_tree("Cost Center", "parent_cost_center")
+	rebuild_tree("Cost Center")
 	frappe.db.commit()
 
 

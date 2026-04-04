@@ -1,0 +1,22 @@
+{
+ "app": "quickbooks_master_sync",
+ "bg_color": "gray",
+ "creation": "2026-04-02 17:42:17.934349",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 0,
+ "label": "Quickbooks Master Sync",
+ "link_to": "Quickbooks Master Sync",
+ "link_type": "Workspace Sidebar",
+ "logo_url": "/assets/quickbooks_master_sync/img/logo.png",
+ "modified": "2026-04-02 17:42:17.934349",
+ "modified_by": "Administrator",
+ "name": "Quickbooks Master Sync",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [],
+ "sidebar": "Quickbooks Master Sync",
+ "standard": 1
+}
