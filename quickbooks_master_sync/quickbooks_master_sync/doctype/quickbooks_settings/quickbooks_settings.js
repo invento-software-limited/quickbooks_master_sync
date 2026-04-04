@@ -34,9 +34,13 @@ frappe.ui.form.on("Quickbooks Settings", {
 		// Add "Sync Data to Quickbooks" button at the top
 		if (!frm.doc.__islocal && frm.doc.enable_quickbooks_online === 1) {
 			frm.add_custom_button(
-				__("Sync Data to Quickbooks"),
+				__("Sync Data From Quickbooks"),
 				function () {
-					frm.trigger("connect_to_qb");
+					_start_sync_with_progress(
+						frm,
+						"quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_resources",
+						__("All Data")
+					);
 				},
 				__("Actions")
 			);
@@ -666,11 +670,24 @@ function _start_sync_with_progress(frm, method, resource_name) {
 			}
 		});
 
-		// Start the sync with progress tracking (runs synchronously)
+		// Start the sync with progress tracking (runs synchronously or queuing)
 		return frappe.call({
 			method: method,
 			freeze: false, // Don't freeze - we want to see progress updates
 			callback: function (r) {
+				// Check if job was queued (background job)
+				if (r.message && r.message.job_queued === true) {
+					// Job is queued and running in background
+					// Keep progress dialog open and wait for real-time updates
+					update_sync_progress(
+						"Sync Queued",
+						"running",
+						__("Sync job queued and running in background...")
+					);
+					// Don't unsubscribe or close dialog - let real-time updates handle completion
+					return;
+				}
+
 				// Unsubscribe from progress updates
 				if (progress_listener) {
 					frappe.realtime.off("quickbooks_sync_progress", progress_listener);
