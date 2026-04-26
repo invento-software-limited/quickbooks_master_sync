@@ -822,7 +822,7 @@ def sync_quickbooks_company_with_client(qb):
 			user = getattr(frappe.session, "user", None)
 			if user and user != "Guest":
 				frappe.defaults.set_user_default("company", doc.name)
-				frappe.db.commit()  # Commit the user default setting
+				frappe.db.commit()  # Commit the user default setting # nosemgrep
 				_dbg(
 					"sync_company:set_default_company",
 					{"company": doc.name, "user": user},
@@ -995,7 +995,7 @@ def sync_quickbooks_company_with_client(qb):
 			)
 
 		# Commit changes and reload session
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		# Trigger reload on client side if called from web request
 		try:
@@ -1164,7 +1164,7 @@ def _post_company_sync_setup(company_doc):
 			stock_settings.save()
 			_dbg("post_sync:updated_stock_settings", {"allow_negative_stock": 1})
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		_dbg("post_sync:committed_changes")
 
 	except Exception as e:

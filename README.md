@@ -1,18 +1,7 @@
-<p align="center">
-  <img src="https://invento.com.bd/wp-content/uploads/2023/11/invento-logo-color.svg" alt="Invento Software Limited" height="60" />
-</p>
-
 <h1 align="center">QuickBooks Master Sync</h1>
 
 <p align="center">
-  A Frappe/ERPNext app for seamlessly syncing <strong>master data</strong> from QuickBooks Online into ERPNext — built and maintained by <a href="https://invento.com.bd">Invento Software Limited</a>.
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Frappe-v15-blue?style=flat-square" />
-  <img src="https://img.shields.io/badge/ERPNext-v15-brightgreen?style=flat-square" />
-  <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" />
-  <img src="https://img.shields.io/badge/QuickBooks-Online-0077C5?style=flat-square&logo=quickbooks" />
+  A Frappe/ERPNext app for seamlessly syncing <strong>master data</strong> from QuickBooks Online into ERPNext — built and maintained by Invento Software Limited.
 </p>
 
 ---
@@ -21,7 +10,7 @@
 
 **QuickBooks Master Sync** bridges the gap between QuickBooks Online and ERPNext by providing a reliable, real-time synchronization of master data — helping businesses maintain consistency across their accounting and ERP systems.
 
-> ⚠️ **Note:** This app synchronizes **master data only** (Accounts, Customers, Suppliers, Items, Tax Rates, Payment Terms, etc.). Transactional data sync (Invoices, Payments, etc.) is available in the **full version**. Contact [munim@invento.com.bd](mailto:munim@invento.com.bd) to upgrade.
+> ⚠️ **Note:** This app synchronizes **master data only** (Accounts, Customers, Suppliers, Items, Tax Rates, Payment Terms, etc.). Transactional data sync (Invoices, Payments, etc.) is available in the **full version**. Contact our support team to upgrade.
 
 ---
 
@@ -98,14 +87,14 @@ The following features are available in the **full version** of QuickBooks Maste
 | Transactional Data Sync (Invoices, Bills, Payments) | 🔒 | ✅ |
 | Journal Entry Sync | 🔒 | ✅ |
 
-📧 **Contact:** [munim@invento.com.bd](mailto:munim@invento.com.bd)  
-🌐 **Website:** [https://invento.com.bd](https://invento.com.bd)
+📧 **Contact:** Support Team  
+🌐 **Website:** Invento Software Limited
 
 ---
 
 ## 🚀 Installation
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+You can install this app using the bench CLI:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
@@ -133,7 +122,7 @@ bench install-app quickbooks_master_sync
 
 ## 🧪 Development
 
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
+This app uses `pre-commit` for code formatting and linting. Please install pre-commit and enable it for this repository:
 
 ```bash
 cd apps/quickbooks_master_sync
@@ -176,10 +165,10 @@ quickbooks_master_sync/
 
 ## 📄 License
 
-MIT — see [LICENSE](./LICENSE) for details.
+MIT — see LICENSE for details.
 
 ---
 
 <p align="center">
-  Built with ❤️ by <a href="https://invento.com.bd"><strong>Invento Software Limited</strong></a>
+  Built with ❤️ by <strong>Invento Software Limited</strong>
 </p>

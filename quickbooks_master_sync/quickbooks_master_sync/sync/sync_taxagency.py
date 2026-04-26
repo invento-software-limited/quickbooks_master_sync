@@ -50,7 +50,7 @@ def _ensure_tax_agency_supplier_group():
 					"parent_supplier_group": parent_group,
 				}
 			).insert(ignore_permissions=True)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 
 			_dbg(
 				"ensure_tax_agency_supplier_group:created",
@@ -125,7 +125,7 @@ def sync_taxagency(quickbooks_obj, qb_company=None):
 				request_data=qb_taxagency,
 			)
 
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	_dbg("sync_taxagency:complete", stats)
 

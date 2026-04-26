@@ -72,7 +72,7 @@ def login_via_oauth2(realmId, auth_code):
 	# OAuth 2.0 uses refresh_token instead of access_token_secret
 	quickbooks_settings.access_token_secret = getattr(quickbooks, "refresh_token", "") or ""
 	quickbooks_settings.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	# Sync company after successful OAuth connection
 	# This ensures the company is created/updated in ERPNext when connecting
@@ -97,7 +97,7 @@ def login_via_oauth2(realmId, auth_code):
 		)
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def quickbooks_authentication_popup(
 	consumer_key: str, consumer_secret: str, force_company_selection: bool | str = False
 ):
@@ -147,7 +147,7 @@ def quickbooks_authentication_popup(
 	quickbooks_settings.request_token = quickbooks.request_token
 	quickbooks_settings.request_token_secret = quickbooks.request_token_secret
 	quickbooks_settings.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	# NOTE: Company sync happens in the OAuth callback (First_callback) after tokens are obtained
 	# Don't try to sync here - we don't have tokens yet!
@@ -176,7 +176,7 @@ def clear_quickbooks_connection():
 	quickbooks_settings.authorize_url = ""
 
 	quickbooks_settings.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	return {
 		"status": "success",

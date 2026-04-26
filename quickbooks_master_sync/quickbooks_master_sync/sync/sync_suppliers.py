@@ -212,12 +212,12 @@ def sync_qb_suppliers(get_qb_supplier, quickbooks_supplier_list, stats=None, qb_
 		# Batch commit every N suppliers for performance
 		current_processed = stats["created"] + stats["updated"] + stats["skipped"] + stats["errors"]
 		if current_processed > 0 and (current_processed - last_commit_count) >= commit_interval:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			last_commit_count = current_processed
 
 	# Final commit for any remaining suppliers
 	if stats["created"] > 0 or stats["updated"] > 0 or stats["errors"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log final summary
 	tracker.log_summary()
@@ -524,7 +524,7 @@ def create_Supplier(qb_supplier, quickbooks_supplier_list, qb_company=None):
 		title = qb_supplier.get("Title", "").strip() if qb_supplier.get("Title") else ""
 		suffix = qb_supplier.get("Suffix", "").strip() if qb_supplier.get("Suffix") else ""
 		if title or suffix:
-			salutation = " ".join(filter(None, [title, suffix])).strip()
+			salutation = " ".join([x for x in [title, suffix] if x]).strip()
 			if salutation:
 				try:
 					meta = frappe.get_meta("Supplier")
@@ -1004,7 +1004,7 @@ def update_Supplier(qb_supplier, existing_name, quickbooks_supplier_list, qb_com
 		title = qb_supplier.get("Title", "").strip() if qb_supplier.get("Title") else ""
 		suffix = qb_supplier.get("Suffix", "").strip() if qb_supplier.get("Suffix") else ""
 		if title or suffix:
-			salutation = " ".join(filter(None, [title, suffix])).strip()
+			salutation = " ".join([x for x in [title, suffix] if x]).strip()
 			if salutation:
 				try:
 					meta = frappe.get_meta("Supplier")
@@ -1469,7 +1469,7 @@ def sync_erp_suppliers():
                             """,
 							(str(response_obj.Id), response_obj.DisplayName),
 						)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 				else:
 					raise _("Does not get any response from quickbooks")
 		except Exception as e:

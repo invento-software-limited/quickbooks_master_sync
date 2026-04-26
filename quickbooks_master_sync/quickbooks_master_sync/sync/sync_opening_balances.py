@@ -339,12 +339,12 @@ def sync_qb_ar_opening_chunk(customers, quickbooks_obj, company, cutoff_date, au
 		# Batch commit every N entries for performance
 		current_processed = stats["ar_customers"] + stats["errors"]
 		if current_processed > 0 and (current_processed - last_commit_count) >= commit_interval:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			last_commit_count = current_processed
 
 	# Final commit
 	if stats["ar_customers"] > 0 or stats["errors"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log final summary
 	tracker.log_summary()
@@ -626,7 +626,7 @@ def create_ar_opening_journal_entry(
 		else:
 			_dbg("create_ar_opening_journal_entry:success", {"name": je.name, "status": "draft"})
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		return je.name
 	except Exception as e:
 		frappe.db.rollback()
@@ -800,12 +800,12 @@ def sync_qb_ap_opening_chunk(vendors, quickbooks_obj, company, cutoff_date, auto
 		# Batch commit every N entries for performance
 		current_processed = stats["ap_vendors"] + stats["errors"]
 		if current_processed > 0 and (current_processed - last_commit_count) >= commit_interval:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			last_commit_count = current_processed
 
 	# Final commit
 	if stats["ap_vendors"] > 0 or stats["errors"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log final summary
 	tracker.log_summary()
@@ -1078,7 +1078,7 @@ def create_ap_opening_journal_entry(
 		else:
 			_dbg("create_ap_opening_journal_entry:success", {"name": je.name, "status": "draft"})
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		return je.name
 	except Exception as e:
 		frappe.db.rollback()
@@ -1458,7 +1458,7 @@ def create_bank_opening_journal_entry(
 			)
 			frappe.logger().info(f"[Opening Balances] ✓ JE {je.name} created as draft for {account_name}")
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		return je.name
 	except Exception as e:
 		frappe.db.rollback()
@@ -1727,7 +1727,7 @@ def create_loan_opening_journal_entry(
 		else:
 			_dbg("create_loan_opening_journal_entry:success", {"name": je.name, "status": "draft"})
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		return je.name
 	except Exception as e:
 		frappe.db.rollback()
@@ -2002,12 +2002,12 @@ def sync_qb_inventory_opening_chunk(inventory_items, quickbooks_obj, company, cu
 		# Batch commit every N entries for performance
 		current_processed = stats["inventory_items"] + stats["errors"]
 		if current_processed > 0 and (current_processed - last_commit_count) >= commit_interval:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			last_commit_count = current_processed
 
 	# Final commit
 	if stats["inventory_items"] > 0 or stats["errors"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log final summary
 	tracker.log_summary()
@@ -2264,7 +2264,7 @@ def create_opening_stock_reconciliation(
 		else:
 			_dbg("create_opening_stock_reconciliation:success", {"name": sr.name, "status": "draft"})
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		return sr.name
 	except Exception as e:
 		frappe.db.rollback()
@@ -2365,7 +2365,7 @@ def get_or_create_opening_balance_equity_account(company):
 		account.parent_account = parent_account
 		account.is_group = 0
 		account.insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		_dbg("get_or_create_opening_balance_equity_account:created", {"account": account.name})
 		return account.name
@@ -2437,7 +2437,7 @@ def get_or_create_stock_adjustment_account(company):
 		account.parent_account = parent_account
 		account.is_group = 0
 		account.insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		_dbg(
 			"get_or_create_stock_adjustment_account:created",

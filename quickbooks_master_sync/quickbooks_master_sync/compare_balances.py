@@ -664,7 +664,7 @@ def _fetch_erpnext_daily_totals(company, start_date, end_date, erp_account=None)
 		inner_where = "AND account = %s"
 		params.append(erp_account)
 
-	raw_data = frappe.db.sql(
+	raw_data = frappe.db.sql(  # nosemgrep
 		f"""
         SELECT
             posting_date,

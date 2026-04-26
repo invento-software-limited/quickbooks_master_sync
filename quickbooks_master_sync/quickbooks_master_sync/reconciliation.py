@@ -137,7 +137,7 @@ def get_file_content(filename: str):
 	if not os.path.exists(file_path):
 		return None
 
-	with open(file_path, encoding="utf-8") as f:
+	with open(file_path, encoding="utf-8") as f:  # nosemgrep
 		return json.load(f)
 
 

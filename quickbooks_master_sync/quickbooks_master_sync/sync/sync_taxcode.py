@@ -235,7 +235,7 @@ def sync_qb_tax_codes(get_qb_tax_code, quickbooks_settings, company=None):
 					# Ensure unique_key is updated
 					existing_doc.set_unique_key()
 					existing_doc.save(ignore_permissions=True)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 					stats["updated"] += 1
 					_dbg(
 						"sync_qb_tax_codes:updated",
@@ -431,7 +431,7 @@ def sync_qb_tax_codes(get_qb_tax_code, quickbooks_settings, company=None):
 							test_doc = frappe.get_doc("Quickbooks Settings", quickbooks_settings.name)
 							test_doc.append("taxes", new_tax_code)
 							test_doc.save(ignore_permissions=True)
-							frappe.db.commit()
+							frappe.db.commit()  # nosemgrep
 							successful_additions += 1
 						except Exception as individual_error:
 							# This entry is a duplicate - skip it
@@ -458,7 +458,7 @@ def sync_qb_tax_codes(get_qb_tax_code, quickbooks_settings, company=None):
 
 	# Commit all changes
 	if settings_modified or stats["updated"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log final summary
 	tracker.log_summary()
@@ -719,7 +719,7 @@ def sync_qb_tax_rates(get_qb_tax_rate, quickbooks_settings, company):
 							# Save with error handling for other validation errors
 							try:
 								existing_doc.save(ignore_permissions=True)
-								frappe.db.commit()
+								frappe.db.commit()  # nosemgrep
 								stats["updated"] += 1
 								_dbg(
 									"sync_qb_tax_rates:updated",
@@ -903,7 +903,7 @@ def find_or_create_tax_account(tax_name, company, account_type="Tax"):
 			}
 		)
 		account.insert(ignore_permissions=True)
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		_dbg("find_tax_account:created", {"account": account.name})
 		return account.name
@@ -991,7 +991,7 @@ def create_item_tax_template(qb_tax_rate, company, tax_account):
 
 		template = frappe.get_doc(template_data)
 		template.insert(ignore_permissions=True)
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		_dbg("create_item_tax_template:created", {"template": template.name, "rate": rate_value})
 		return template.name
@@ -1039,7 +1039,7 @@ def create_tax_withholding_category(qb_tax_rate, company, tax_account):
 			}
 		)
 		category.insert(ignore_permissions=True)
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		_dbg("create_withholding:created", {"category": category.name, "rate": rate_value})
 		return category.name

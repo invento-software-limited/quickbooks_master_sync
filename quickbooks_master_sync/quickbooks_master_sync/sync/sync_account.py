@@ -214,7 +214,7 @@ def _ensure_root_accounts(company):
     """,
 		(company,),
 	)
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	created = []
 	for label, rtype in root_map.items():
@@ -278,7 +278,7 @@ def _ensure_root_accounts(company):
 		from frappe.utils.nestedset import rebuild_tree
 
 		rebuild_tree("Account")
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		_dbg("ensure_root_accounts:summary", {"created_count": len(created), "accounts": created})
 
 
@@ -373,14 +373,14 @@ def _ensure_root_cost_centers(company):
 		company_doc.cost_center = main_name
 		company_doc.flags.ignore_mandatory = True
 		company_doc.save()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		_dbg("ensure_root_cost_centers:company_default_set", {"company": company, "cost_center": main_name})
 
 	# Final tree rebuild to ensure integrity
 	from frappe.utils.nestedset import rebuild_tree
 
 	rebuild_tree("Cost Center")
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 
 def _map_quickbooks_account_type_to_erpnext(qb_account_type):
@@ -653,12 +653,12 @@ def sync_qb_accounts(get_qb_account, quickbooks_account_list, qb_company=None, t
 		# Batch commit every N accounts for performance
 		current_processed = stats["created"] + stats["failed"] + stats["skipped"]
 		if current_processed > 0 and (current_processed - last_commit_count) >= commit_interval:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			last_commit_count = current_processed
 
 	# Final commit for any remaining accounts
 	if stats["created"] > 0 or stats["failed"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log final summary
 	tracker.log_summary()

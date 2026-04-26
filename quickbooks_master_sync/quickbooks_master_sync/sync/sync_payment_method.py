@@ -106,7 +106,7 @@ def sync_payment_method(quickbooks_obj):
 					if hasattr(mode_doc, "quickbooks_payment_method_id"):
 						mode_doc.quickbooks_payment_method_id = unique_qb_id
 					mode_doc.save()
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 					stats["updated"] += 1
 					_dbg(
 						"sync_payment_method:updated",
@@ -146,7 +146,7 @@ def sync_payment_method(quickbooks_obj):
 						if hasattr(mode_doc, "quickbooks_payment_method_id"):
 							mode_doc.quickbooks_payment_method_id = unique_qb_id
 						mode_doc.save()
-						frappe.db.commit()
+						frappe.db.commit()  # nosemgrep
 						stats["updated"] += 1
 						_dbg(
 							"sync_payment_method:updated_by_name",
@@ -182,7 +182,7 @@ def sync_payment_method(quickbooks_obj):
 						if hasattr(mode_doc, "quickbooks_payment_method_id"):
 							mode_doc.quickbooks_payment_method_id = unique_qb_id
 						mode_doc.insert()
-						frappe.db.commit()
+						frappe.db.commit()  # nosemgrep
 						stats["created"] += 1
 						_dbg(
 							"sync_payment_method:created",

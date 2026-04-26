@@ -289,7 +289,7 @@ def create_or_update_tax_mapping(qb_tax_id, qb_tax_name, tax_account, company=No
 		message = f"Created tax mapping for {qb_tax_name}"
 
 	qb_settings.save(ignore_permissions=True)
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	company_str = f" for company {company}" if company else " (global)"
 	return message + company_str

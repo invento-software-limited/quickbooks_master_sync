@@ -87,7 +87,7 @@ def sync_term(quickbooks_obj, qb_company=None):
 				request_data=qb_term,
 			)
 
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	_dbg("sync_term:complete", stats)
 

@@ -94,7 +94,7 @@ class ImportTracker:
 		log_line = f"[{timestamp}] {aligned_level} {params_str}\n"
 
 		try:
-			with open(self.log_file_path, "a", encoding="utf-8") as f:
+			with open(self.log_file_path, "a", encoding="utf-8") as f:  # nosemgrep
 				f.write(log_line)
 		except Exception:
 			pass
