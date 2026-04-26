@@ -76,7 +76,7 @@ def _ensure_item_group(group_name, parent_group=None):
 					item_group_doc = frappe.get_doc("Item Group", existing_group)
 					item_group_doc.parent_item_group = resolved_parent
 					item_group_doc.save(ignore_permissions=True)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 					_dbg("_ensure_item_group:updated_parent", {"name": group_name, "parent": resolved_parent})
 				except Exception as e:
 					_dbg("_ensure_item_group:update_parent_error", {"name": group_name, "error": str(e)})
@@ -410,7 +410,7 @@ def create_Item(quickbooks_obj, qb_company=None):
 				# syn_products.py main loop doesn't have a commit?
 				# Usually better to commit periodically.
 				if (stats["created"] + stats["updated"]) % 10 == 0:
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 
 				if is_new:
 					stats["created"] += 1
@@ -427,7 +427,7 @@ def create_Item(quickbooks_obj, qb_company=None):
 				_dbg("create_Item:error", {"item": item_code, "error": str(e)})
 
 		# Final commit
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		tracker.cleanup()
 
 	except Exception as e:

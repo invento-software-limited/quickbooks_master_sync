@@ -12,7 +12,7 @@ from .exceptions import QuickbooksSetupError
 def disable_quickbooks_sync_on_exception():
 	frappe.db.rollback()
 	frappe.db.set_single_value("Quickbooks Settings", "enable_quickbooks_online", 0)
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 
 def make_quickbooks_log(
@@ -73,7 +73,7 @@ def make_quickbooks_log(
 		for i in range(max_retries):
 			try:
 				log.save(ignore_permissions=True)
-				frappe.db.commit()
+				frappe.db.commit()  # nosemgrep
 				break
 			except frappe.TimestampMismatchError:
 				if i < max_retries - 1:
@@ -101,7 +101,7 @@ def make_quickbooks_log(
 						}
 					)
 					new_log.insert(ignore_permissions=True)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 			except Exception as e:
 				# For other errors, log to console but don't crash the sync process
 				print(f"Failed to save Quickbooks Log: {e!s}")

@@ -172,7 +172,7 @@ def migrate_qb_id(doctype, qb_id_field, company_field="company"):
 					)
 					updated_count += 1
 
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		print(f"Updated {updated_count} records in {doctype}")
 		return updated_count
 

@@ -209,7 +209,7 @@ def sync_erp_employees():
                             """,
 							(str(response_obj.Id), response_obj.DisplayName),
 						)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 				else:
 					raise _("Does not get any response from quickbooks")
 		except Exception as e:

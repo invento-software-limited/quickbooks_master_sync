@@ -4,6 +4,7 @@ app_publisher = "Invento Software Limited"
 app_description = "NA"
 app_email = "munim@invento.com.bd"
 app_license = "mit"
+app_categories = ["Integration", "Accounting"]
 
 # Apps
 # ------------------
@@ -129,7 +130,7 @@ add_to_apps_screen = [
 # ---------------
 # Override standard doctype classes
 
-override_doctype_class = {
+extend_doctype_class = {
 	"Company": "quickbooks_master_sync.quickbooks_master_sync.utils.hook_functions.company.CustomCompany",
 }
 

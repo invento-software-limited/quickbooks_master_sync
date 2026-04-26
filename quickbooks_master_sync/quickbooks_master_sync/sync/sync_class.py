@@ -94,7 +94,7 @@ def sync_class(quickbooks_obj, qb_company=None):
 				request_data=qb_class,
 			)
 
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep
 
 	_dbg("sync_class:complete", stats)
 

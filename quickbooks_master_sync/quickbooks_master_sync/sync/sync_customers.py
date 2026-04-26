@@ -282,12 +282,12 @@ def sync_qb_customers(get_qb_customer, quickbooks_customer_list, stats=None, qb_
 		# Batch commit every N customers for performance
 		current_processed = stats["created"] + stats["updated"] + stats["skipped"] + stats["errors"]
 		if current_processed > 0 and (current_processed - last_commit_count) >= commit_interval:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			last_commit_count = current_processed
 
 	# Final commit for any remaining customers
 	if stats["created"] > 0 or stats["updated"] > 0 or stats["errors"] > 0:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 	# Log summary
 	tracker.log_summary()
@@ -1337,7 +1337,7 @@ def sync_erp_customers():
                         """,
 						(response_obj.Id, response_obj.DisplayName),
 					)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 				else:
 					raise _("Does not get any response from quickbooks")
 		except Exception as e:

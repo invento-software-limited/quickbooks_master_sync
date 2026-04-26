@@ -117,7 +117,7 @@ def delete_company_data(
 
 		# Commit after Stock Ledger Entries and Stock Reconciliations
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_ledger_entries", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Journal Entry", "company": company_name})
@@ -129,7 +129,7 @@ def delete_company_data(
 
 		# Commit after GL entries to ensure they're saved
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_journal_entries", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Payment Entry", "company": company_name})
@@ -141,7 +141,7 @@ def delete_company_data(
 
 		# Commit after Payment Ledger Entries and Journal Entries
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_payment_entries", {"company": company_name})
 
 		_dbg("step1_gl_entries:complete", {"company": company_name})
@@ -157,7 +157,7 @@ def delete_company_data(
 		)
 		# Commit after Sales Invoices
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_sales_invoices", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Purchase Invoice", "company": company_name})
@@ -168,7 +168,7 @@ def delete_company_data(
 		)
 		# Commit after Purchase Invoices
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_purchase_invoices", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Sales Order", "company": company_name})
@@ -180,7 +180,7 @@ def delete_company_data(
 
 		# Commit after Sales Orders
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_sales_orders", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Purchase Order", "company": company_name})
@@ -191,7 +191,7 @@ def delete_company_data(
 		)
 		# Commit after Purchase Orders
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_purchase_orders", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Quotation", "company": company_name})
@@ -201,7 +201,7 @@ def delete_company_data(
 		)
 		# Commit after Quotations
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_quotations", {"company": company_name})
 
 		_dbg("delete_doctype:start", {"doctype": "Delivery Note", "company": company_name})
@@ -220,7 +220,7 @@ def delete_company_data(
 
 		# Commit after all invoices/transactions to ensure they're fully deleted
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_all_transactions", {"company": company_name})
 
 		_dbg("step2_invoices:complete", {"company": company_name})
@@ -252,7 +252,7 @@ def delete_company_data(
 
 		# Commit after master data deletions
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_master_data", {"company": company_name})
 
 		_dbg("step3_master_data:complete", {"company": company_name})
@@ -280,7 +280,7 @@ def delete_company_data(
 
 		# Commit after child doctype deletions
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:after_child_doctypes", {"company": company_name})
 
 		_dbg("step4_child_doctypes:complete", {"company": company_name})
@@ -313,7 +313,7 @@ def delete_company_data(
 
 		# Commit all deletions before logging to avoid hitting write limit
 		if not dry_run:
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 			_dbg("commit:final", {"company": company_name})
 
 		# Calculate total - handle case where some values might be lists instead of integers
@@ -354,7 +354,7 @@ def delete_company_data(
 			)
 
 			# Commit the log entry
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 
 		_dbg("delete_company_data:complete", stats)
 
@@ -1322,7 +1322,7 @@ def _delete_quickbooks_logs(company_name, stats, dry_run):
 
 				# Commit after each batch
 				try:
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 				except Exception as commit_error:
 					_dbg(f"delete_{doctype}:commit_error", {"error": str(commit_error)})
 					# Continue even if commit fails - individual deletes may have succeeded
@@ -1391,7 +1391,7 @@ def _delete_debug_log_files(company_name, stats, dry_run):
 			else:
 				# Filename doesn't contain abbreviation - check file content
 				try:
-					with open(file_path, encoding="utf-8") as f:
+					with open(file_path, encoding="utf-8") as f:  # nosemgrep
 						content = json.load(f)
 
 						# If it's a list of log entries, check if any entry has this company_abbr

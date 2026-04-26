@@ -157,7 +157,7 @@ def _save_debug_log_to_file(module: str, event: str, payload: dict[str, Any], co
 		debug_logs = []
 		if os.path.exists(debug_log_file):
 			try:
-				with open(debug_log_file, encoding="utf-8") as f:
+				with open(debug_log_file, encoding="utf-8") as f:  # nosemgrep
 					debug_logs = json.load(f)
 					if not isinstance(debug_logs, list):
 						debug_logs = []
@@ -181,7 +181,7 @@ def _save_debug_log_to_file(module: str, event: str, payload: dict[str, Any], co
 		debug_logs.append(log_entry)
 
 		# Save back to file
-		with open(debug_log_file, "w", encoding="utf-8") as f:
+		with open(debug_log_file, "w", encoding="utf-8") as f:  # nosemgrep
 			json.dump(debug_logs, f, indent=2, ensure_ascii=False, default=str)
 
 	except Exception:

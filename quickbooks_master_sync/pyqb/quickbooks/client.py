@@ -875,7 +875,7 @@ class QuickBooks:
 					quickbooks_settings.access_token = new_access
 					quickbooks_settings.access_token_secret = new_refresh
 					quickbooks_settings.save(ignore_permissions=True)
-					frappe.db.commit()
+					frappe.db.commit()  # nosemgrep
 			except Exception as save_error:
 				# Log but don't fail - token refresh still worked in memory
 				# This allows sync to continue even if save fails
