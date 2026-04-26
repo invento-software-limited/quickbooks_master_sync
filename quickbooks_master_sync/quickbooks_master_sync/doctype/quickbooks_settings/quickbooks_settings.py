@@ -97,7 +97,7 @@ def login_via_oauth2(realmId, auth_code):
 		)
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def quickbooks_authentication_popup(
 	consumer_key: str, consumer_secret: str, force_company_selection: bool | str = False
 ):
