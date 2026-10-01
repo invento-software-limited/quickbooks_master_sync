@@ -9,10 +9,18 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Frappe-v15-blue?style=flat-square" />
-  <img src="https://img.shields.io/badge/ERPNext-v15-brightgreen?style=flat-square" />
+  <img src="https://img.shields.io/badge/Frappe-v15%20%7C%20v16-blue?style=flat-square" alt="Frappe v15 and v16" />
+  <img src="https://img.shields.io/badge/ERPNext-v15%20%7C%20v16-brightgreen?style=flat-square" alt="ERPNext v15 and v16" />
   <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" />
   <img src="https://img.shields.io/badge/QuickBooks-Online-0077C5?style=flat-square&logo=quickbooks" />
+</p>
+
+<p align="center">
+  <a href="https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync"><strong>Install from Frappe Cloud Marketplace</strong></a>
+  &nbsp;&middot;&nbsp;
+  <a href="https://invento.com.bd/quickbooks-to-erpnext-migration/"><strong>QuickBooks to ERPNext guide</strong></a>
+  &nbsp;&middot;&nbsp;
+  <a href="https://invento-software-limited.github.io/quickbooks_master_sync/"><strong>Documentation</strong></a>
 </p>
 
 ---
@@ -22,6 +30,16 @@
 **QuickBooks Master Sync** bridges the gap between QuickBooks Online and ERPNext by providing a reliable, real-time synchronization of master data — helping businesses maintain consistency across their accounting and ERP systems.
 
 > ⚠️ **Note:** This app synchronizes **master data only** (Accounts, Customers, Suppliers, Items, Tax Rates, Payment Terms, etc.). Transactional data sync (Invoices, Payments, etc.) is available in the **full version**. Contact [munim@invento.com.bd](mailto:munim@invento.com.bd) to upgrade.
+
+## How the migration works
+
+The app handles the three parts of a clean move from QuickBooks Online to ERPNext:
+
+1. **Connect** — Authorize QuickBooks Online securely through OAuth2, with separate credentials for each company.
+2. **Move** — Sync the chart of accounts, customers, suppliers, items, tax rates, payment terms, payment methods, and opening balances.
+3. **Prove** — Compare customer and supplier balances side by side so differences surface before ERPNext goes live.
+
+Read the full [QuickBooks to ERPNext migration guide](https://invento.com.bd/quickbooks-to-erpnext-migration/) or [install the free app from Frappe Cloud Marketplace](https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync).
 
 ---
 
@@ -115,8 +133,8 @@ bench install-app quickbooks_master_sync
 
 ### Requirements
 
-- Frappe Framework v15+
-- ERPNext v15+
+- Frappe Framework v15 or v16
+- ERPNext v15 or v16
 - QuickBooks Online account with API access
 
 ---
@@ -176,7 +194,7 @@ quickbooks_master_sync/
 
 ## 📄 License
 
-MIT — see [LICENSE](./LICENSE) for details.
+MIT — see [license.txt](./license.txt) for details.
 
 ---
 
