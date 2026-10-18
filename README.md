@@ -31,35 +31,50 @@
 
 ## Connect, move, verify
 
-| 1. Connect | 2. Move | 3. Verify |
-| --- | --- | --- |
-| Authorize QuickBooks Online through Intuit OAuth 2.0. | Start a background job to import master records and opening balances. | Compare customer and supplier balances, review logs and resolve differences before go-live. |
+<table align="center">
+  <thead>
+    <tr><th>1. Connect</th><th>2. Move</th><th>3. Verify</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Authorize QuickBooks Online through Intuit OAuth 2.0.</td><td>Start a background job to import master records and opening balances.</td><td>Compare customer and supplier balances, review logs and resolve differences before go-live.</td></tr>
+  </tbody>
+</table>
 
 Live progress reports the current run. The public app does not enable scheduled synchronization or push ERPNext changes back to QuickBooks. QuickBooks Desktop company files require a different migration route.
 
 ## What moves into ERPNext
 
-| QuickBooks Online | ERPNext destination |
-| --- | --- |
-| Chart of accounts | Accounts, including hierarchy and account classification |
-| Customers | Customers and related contact/address records |
-| Vendors | Suppliers and related contact/address records |
-| Items and services | Items |
-| Tax codes and rates | Sales Tax Templates |
-| Payment terms | Payment Terms Templates |
-| Payment methods | Modes of Payment |
-| Opening balances | Opening entries; review the resulting ledger and party balances |
+<table align="center">
+  <thead>
+    <tr><th>QuickBooks Online</th><th>ERPNext destination</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Chart of accounts</td><td>Accounts, including hierarchy and account classification</td></tr>
+    <tr><td>Customers</td><td>Customers and related contact/address records</td></tr>
+    <tr><td>Vendors</td><td>Suppliers and related contact/address records</td></tr>
+    <tr><td>Items and services</td><td>Items</td></tr>
+    <tr><td>Tax codes and rates</td><td>Sales Tax Templates</td></tr>
+    <tr><td>Payment terms</td><td>Payment Terms Templates</td></tr>
+    <tr><td>Payment methods</td><td>Modes of Payment</td></tr>
+    <tr><td>Opening balances</td><td>Opening entries; review the resulting ledger and party balances</td></tr>
+  </tbody>
+</table>
 
 Company setup also supports related records such as classes and tax agencies. Review mappings and target-company settings in a test site before using live books.
 
 ## Free app and full migration scope
 
-| Capability | Free Marketplace app | Full migration engagement |
-| --- | --- | --- |
-| Master records and opening balances | Included | Scope agreed with Invento |
-| Customer and supplier balance comparison | Included | Scope agreed with Invento |
-| Detailed account comparison tabs | Restricted in the public app | Contact Invento |
-| Historical invoices, bills, payments and journals | Not included | Confirm coverage with Invento before purchase |
+<table align="center">
+  <thead>
+    <tr><th>Capability</th><th>Free Marketplace app</th><th>Full migration engagement</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Master records and opening balances</td><td>Included</td><td>Scope agreed with Invento</td></tr>
+    <tr><td>Customer and supplier balance comparison</td><td>Included</td><td>Scope agreed with Invento</td></tr>
+    <tr><td>Detailed account comparison tabs</td><td>Restricted in the public app</td><td>Contact Invento</td></tr>
+    <tr><td>Historical invoices, bills, payments and journals</td><td>Not included</td><td>Confirm coverage with Invento before purchase</td></tr>
+  </tbody>
+</table>
 
 The public repository supplies the free app. Detailed account tabs display an upgrade prompt. Historical transaction migration is a separate scope: ask Invento to confirm supported records, versions, pricing and delivery before committing.
 
@@ -86,11 +101,16 @@ bench --site your-site.example migrate
 
 This README belongs to the `version-16` release branch. Do not install `develop` as a substitute for that release.
 
-| Branch | Frappe / ERPNext |
-| --- | --- |
-| version-15 | v15 |
-| version-16 | v16 |
-| develop | Development; not the release installation target |
+<table align="center">
+  <thead>
+    <tr><th>Branch</th><th>Frappe / ERPNext</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>version-15</td><td>v15</td></tr>
+    <tr><td>version-16</td><td>v16</td></tr>
+    <tr><td>develop</td><td>Development; not the release installation target</td></tr>
+  </tbody>
+</table>
 
 ## Configure and run
 
