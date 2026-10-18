@@ -1,194 +1,122 @@
-# 📖 QuickBooks Master Sync - User Guide
+# QuickBooks Master Sync user guide
 
-## 🏁 Getting Started
+This guide covers the free app for ERPNext v15 and v16: connection, master records, opening balances and customer/supplier comparison. Historical transaction migration and detailed account tabs require a separate discussion with Invento.
 
-### Prerequisites
--   ERPNext v16+ instance with administrator access.
--   A QuickBooks Online account with API access.
--   QuickBooks Developer app credentials (Client ID and Client Secret).
+## Before you begin
 
-### 🚀 Installation
+Use a test site and take a restorable database/files backup. Agree the target company, currency, fiscal year, account mapping and cutover date with the finance owner. The connection process can create/update company-related records before you start the main run.
 
-Install the app using the bench CLI:
+The opening-balance routine defaults to the current date when no cutoff is supplied, and the standard background run requests automatic submission. Do not assume the screen provides a historical cutoff selector or a reversible preview.
 
-```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app https://github.com/invento-software-limited/quickbooks_master_sync --branch version-16
-bench --site your-site.com install-app quickbooks_master_sync
-```
+## Installation
 
-After installation, run a bench migrate and restart the server:
+On Frappe Cloud, follow the [Marketplace listing](https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync) and [Frappe Cloud installation guide](https://docs.frappe.io/cloud/installing-an-app).
+
+For an existing self-hosted bench, use the matching release:
+
+### ERPNext v16
 
 ```bash
-bench migrate
-bench restart
+cd /path/to/frappe-bench
+bench get-app https://github.com/invento-software-limited/quickbooks_master_sync.git --branch version-16
+bench --site your-site.example install-app quickbooks_master_sync
+bench --site your-site.example migrate
 ```
 
-## ⚙️ Configuration
+### ERPNext v15
 
-### 1. QuickBooks Developer App Setup
+```bash
+cd /path/to/frappe-bench
+bench get-app https://github.com/invento-software-limited/quickbooks_master_sync.git --branch version-15
+bench --site your-site.example install-app quickbooks_master_sync
+bench --site your-site.example migrate
+```
 
-Before configuring in ERPNext, create a QuickBooks Online app:
+Keep Frappe and ERPNext on matching major versions. The develop branch is for development.
 
-1.  Go to the [QuickBooks Developer Portal](https://developer.intuit.com/).
-2.  Create a new app and select **Accounting** API.
-3.  Under **Keys & OAuth**, note your **Client ID** and **Client Secret**.
-4.  Set the **Redirect URI** to: `https://your-erpnext-domain.com/api/method/quickbooks_master_sync.api.oauth.callback`
-5.  Enable **OpenID Connect** if needed for user verification.
-6.  Subscribe to the appropriate QuickBooks API scopes:
-    -   `com.intuit.quickbooks.accounting`
-    -   `openid` (optional)
-    -   `profile` (optional)
-    -   `email` (optional)
+## Connect QuickBooks Online
 
-### 2. QuickBooks Settings in ERPNext
+1. In the Intuit Developer Portal, create/select your QuickBooks Online app and its Accounting API access. Use sandbox credentials for a sandbox company and production credentials for a live company.
+2. Register this exact HTTPS redirect URI, replacing only the site hostname:
 
-1.  Navigate to **QuickBooks Settings** in the ERPNext workspace.
-2.  Enter your **Client ID** and **Client Secret** from the QuickBooks Developer Portal.
-3.  Set the **Company** for which you want to sync data.
-4.  Choose sync options (which master data types to sync).
-5.  Click **Connect QuickBooks** to initiate the OAuth2 flow.
-6.  Authorize the connection in the QuickBooks popup window.
+```text
+https://your-site.example/api/method/quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.First_callback
+```
 
-### 3. Company Mapping
+3. In ERPNext, open **Quickbooks Settings**. Enable **Enable Quickbooks Online** and **Quickbooks to ERPNext**.
+4. Enter the Intuit Client ID in **Consumer key**, and Client Secret in **Consumer Secret**. Set **Sandbox Mode** for the environment being connected.
+5. Save, use **Connect to Quickbooks**, and authorize the intended company in Intuit's popup. Allow popups only for your trusted ERPNext site when needed.
+6. Review the company created/updated by the connection, Company Settings rows and tax mappings. Check the active company before every run.
 
-1.  After OAuth2 authorization, select the QuickBooks company to map.
-2.  The system matches QuickBooks company currency and fiscal year with ERPNext.
-3.  Sync can proceed once mapping is confirmed.
+The code stores the active connection in the Quickbooks Settings singleton. Company Settings rows contain company-specific configuration; they are not independent OAuth credential stores. Reconnect deliberately when changing the connected QuickBooks company.
 
-## 🎯 Running a Sync
+## Run and inspect a sync
 
-### Full Master Data Sync
+Start the sync action from Quickbooks Settings. In the current interface an Actions item can be labelled **Sync Data to Quickbooks**; despite that wording, the enabled direction in this public app is **QuickBooks Online to ERPNext**. The form also provides connection and comparison actions. Verify your release's screen before proceeding.
 
-1.  Go to **QuickBooks Settings** → **Actions**.
-2.  Click **Sync QuickBooks**.
-3.  A progress dialog appears showing real-time sync status.
-4.  Wait for all steps to complete (✅ indicators for each data type).
-5.  Review the sync summary for any mismatches or errors.
+The app queues a background job and publishes progress during the run. Company setup imports accounting foundations, then the main run handles masters and opening balances. The code may log an individual step failure and continue, so the final progress message does not replace a log review.
 
-### Individual Data Sync
+1. Check the connected company and environment.
+2. Watch progress and inspect Quickbooks Log for errors or skipped records.
+3. Review imported master records and opening documents in ERPNext.
+4. Open **QuickBooks Balance Comparison** and compare **Customers** and **Suppliers** for the intended company/date.
+5. Investigate missing records and differences before financial sign-off.
 
-You can also trigger sync for specific data types:
+## Reconciliation and debug records
 
--   **Sync Chart of Accounts**: Sync only Accounts.
--   **Sync Customers**: Sync only Customers.
--   **Sync Suppliers**: Sync only Suppliers/Vendors.
--   **Sync Items**: Sync only Items and Services.
--   **Sync Tax Rates**: Sync only Tax Codes.
--   **Sync Payment Terms**: Sync only Payment Terms Templates.
--   **Sync Payment Methods**: Sync only Modes of Payment.
+The free app compares customer and supplier balances. Account summary totals are available, but detailed matched/mismatched account tabs show a premium prompt. Do not mistake account summary totals for unlocked detailed account comparison.
 
-## 🔍 Balance Comparison
+The **QuickBooks Debug Viewer** lists stored QuickBooks response files for investigation, including company and data-type context. Its item-record reconciliation checks imported records; it is not a substitute for comparing the general ledger, receivables and payables.
 
-### Customer & Supplier Reconciliation
+![QuickBooks Debug Viewer with stored sandbox response files](images/debug-viewer.webp)
 
-1.  Navigate to **QuickBooks Balance Comparison**.
-2.  Select **Customers** or **Suppliers** tab.
-3.  View side-by-side balances from QuickBooks and ERPNext.
-4.  Summary cards show:
-    -   **Matched**: Records with identical balances.
-    -   **Mismatched**: Records with differing balances.
-    -   **QuickBooks Only**: Records only in QuickBooks.
-    -   **ERPNext Only**: Records only in ERPNext.
-5.  Click on any record to see detailed breakdown.
+Debug responses can contain confidential information. Keep them inside the authorized environment; redact evidence before sharing a public issue. Do not clear evidence needed to investigate a failed migration.
 
-### Account Balance Comparison
+## Reruns and recovery
 
-> 🔒 This feature is available in the premium version. Contact Invento Software Limited to unlock.
+Several routines match records by QuickBooks IDs or check whether opening entries already exist. This does not guarantee that every partial run can be repeated without changes. Review which documents were created/submitted, resolve the underlying error and validate a rerun on the test site.
 
-### Opening Balances Sync
+There is no documented one-click rollback for a whole migration. **Delete Company Data** is a separate destructive utility, not an undo button. Use a restorable test backup when you need a clean starting point, and have the finance owner review any accounting corrections.
 
-Opening balances are automatically synced at the end of each master data sync cycle:
-1.  After all master data types are synced, the system checks for opening balance data.
-2.  Opening balances are mapped from QuickBooks accounts to corresponding ERPNext accounts.
-3.  Journal Entries are created in ERPNext to reflect opening positions.
+## Troubleshooting
 
-### Debug Log Viewer
+| Problem | What to check |
+| --- | --- |
+| Authorization popup does not open | Browser popup permission for the ERPNext domain; saved credentials and enabled connector |
+| Invalid redirect URI | Exact HTTPS callback above, including capitalization, and the Intuit app/environment |
+| Wrong QuickBooks company | Realm/company selected during authorization; reconnect using the connection action before running again |
+| Background run does not advance | Worker/queue health, realtime connectivity, ERPNext error logs and Quickbooks Log |
+| Records are missing despite a completed indicator | Individual step errors and skipped records; some errors are caught so later steps can continue |
+| Balance difference | Selected company/date, account and party mapping, source data and submitted opening documents |
+| Existing entry is skipped | Check its QuickBooks ID and document state before attempting a rerun; do not delete it merely to bypass the check |
+| Detailed account tab is restricted | This is outside the free app; discuss the required scope with Invento |
 
-1.  Navigate to **QuickBooks Debug Viewer**.
-2.  View API request/response logs for troubleshooting.
-3.  Use filters by date, data type, or status.
-4.  Click **Clear Logs** to remove old entries with an audit trail.
+## Integration reference
 
-## 🛠️ Troubleshooting
+The following existing whitelisted method paths are verified in the public source. They are for maintainers integrating with Frappe's authenticated method API, not an unauthenticated public service. No API was added by this documentation update.
 
-### OAuth2 Connection Issues
+| Method path | Purpose |
+| --- | --- |
+| quickbooks_master_sync.quickbooks_master_sync.api.sync_quickbooks_resources | Queue a configured master/opening-balance run |
+| quickbooks_master_sync.quickbooks_master_sync.api.compare_party_balances | Compare Customer or Supplier balances using party_type, company_name, as_of_date and tolerance |
+| quickbooks_master_sync.quickbooks_master_sync.api.get_quickbooks_debug_files | List stored response files for investigation |
+| quickbooks_master_sync.quickbooks_master_sync.doctype.quickbooks_settings.quickbooks_settings.First_callback | Intuit OAuth callback; use the exact registered redirect URI |
 
-| Problem | Solution |
-|---|---|
-| Authorization popup blocked | Allow popups for your ERPNext domain. |
-| Token expired | Re-authorize via **QuickBooks Settings** → **Reconnect**. |
-| Invalid redirect URI | Verify the redirect URI in QuickBooks Developer Portal matches exactly. |
-| Scope mismatch | Ensure all required scopes are enabled in your QuickBooks app. |
+See the [source](https://github.com/invento-software-limited/quickbooks_master_sync) for signatures and access handling on your installed branch. Older documentation paths under api.oauth, api.sync and api.data do not match the current package structure.
 
-### Sync Errors
+## Common questions
 
-| Problem | Solution |
-|---|---|
-| Account mapping failed | Verify Company currency matches between QuickBooks and ERPNext. |
-| Customer not found | Check if the Customer exists in QuickBooks before syncing. |
-| Item type mismatch | Review Item type mappings in settings. |
-| Rate limit exceeded | Wait a few minutes and retry. QuickBooks API has usage limits. |
+### Is this continuous two-way sync?
+No. The documented workflow is a manually started pull from QuickBooks Online. Live progress describes the running job. No scheduled sync is enabled in the app hooks.
 
-### Common Issues
+### Does it import QuickBooks Desktop files?
+No. It connects to QuickBooks Online through Intuit's API.
 
-1.  **"QuickBooks company not found"**: Ensure you have selected the correct QuickBooks company during OAuth2.
-2.  **"Sync stuck at 0%"**: Check your internet connection and QuickBooks API status.
-3.  **"Balance mismatch"**: Verify the date range and account mappings.
-4.  **"Duplicate records"**: Enable **Skip Existing** option in sync settings.
+### Are old invoices and payments included?
+Not in the free app's master-data run. Confirm transaction types, date coverage, compatibility and pricing with Invento when scoping a full migration.
 
-## 📋 API Reference
+### Does free mean no project cost?
+The app is MIT licensed. Hosting, migration preparation, implementation and support can have separate costs.
 
-QuickBooks Master Sync exposes the following whitelisted API endpoints:
-
-### OAuth2 Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/method/quickbooks_master_sync.api.oauth.get_authorization_url` | Get QuickBooks OAuth2 URL |
-| GET | `/api/method/quickbooks_master_sync.api.oauth.callback` | OAuth2 callback handler |
-| POST | `/api/method/quickbooks_master_sync.api.oauth.disconnect` | Disconnect QuickBooks connection |
-
-### Sync Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/method/quickbooks_master_sync.api.sync.start` | Start full master data sync |
-| POST | `/api/method/quickbooks_master_sync.api.sync.status` | Get current sync status |
-| POST | `/api/method/quickbooks_master_sync.api.sync.stop` | Stop active sync |
-
-### Data Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/method/quickbooks_master_sync.api.data.get_companies` | List QuickBooks companies |
-| POST | `/api/method/quickbooks_master_sync.api.data.get_accounts` | Get synced accounts |
-| POST | `/api/method/quickbooks_master_sync.api.data.get_customers` | Get synced customers |
-| POST | `/api/method/quickbooks_master_sync.api.data.get_suppliers` | Get synced suppliers |
-| POST | `/api/method/quickbooks_master_sync.api.data.get_items` | Get synced items |
-
-## ❓ FAQ
-
-### Is this app free?
-The master data sync features are free and open-source. Transactional data sync and premium features require a license from Invento Software Limited.
-
-### Does it support multiple companies?
-Yes, you can configure separate QuickBooks connections for each ERPNext Company.
-
-### How often should I sync?
-We recommend syncing daily or weekly, depending on how frequently master data changes in QuickBooks.
-
-### Can I customize the field mappings?
-Field mappings are pre-configured but can be extended through Frappe hooks and custom scripts.
-
-### What happens if a sync fails?
-The system provides detailed error logs in the QuickBooks Debug Viewer. Failed items are logged without affecting already-synced data.
-
-### How do I get support?
-Contact the Invento Software Limited support team via: munim@invento.com.bd
-
-### Is my data secure?
-Yes, all OAuth2 tokens are encrypted at rest. Data transfer uses HTTPS. No data is stored outside your ERPNext instance and QuickBooks Online.
-
-### Can I use this with Frappe Cloud?
-Yes, the app is fully compatible with Frappe Cloud and Docker-based deployments.
+### How do I get help?
+Use [GitHub Issues](https://github.com/invento-software-limited/quickbooks_master_sync/issues) for redacted reproducible problems. Include Frappe/ERPNext/app versions, company/environment context and steps taken. For project help, [discuss your migration](https://invento.com.bd/free-consultation/?utm_source=github_docs&utm_medium=referral&utm_campaign=quickbooks_master_sync&utm_content=guide_enquiry) or contact [munim@invento.com.bd](mailto:munim@invento.com.bd).
