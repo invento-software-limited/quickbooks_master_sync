@@ -1,8 +1,29 @@
-# QuickBooks Master Sync for ERPNext
+<p align="center">
+  <a href="https://invento.com.bd"><img src="https://invento.com.bd/wp-content/uploads/2023/11/invento-logo-color.svg" alt="Invento Software Limited" height="58"></a>
+</p>
 
-Move QuickBooks Online master data and opening balances into ERPNext, then compare customer and supplier balances before go-live. Free and MIT licensed, with release branches for ERPNext v15 and v16.
+<h1 align="center">QuickBooks Master Sync for ERPNext</h1>
 
-[**Install from Frappe Cloud Marketplace**](https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync) · [Documentation](https://invento-software-limited.github.io/quickbooks_master_sync/) · [Plan your migration](https://invento.com.bd/quickbooks-to-erpnext-migration/?utm_source=github&utm_medium=referral&utm_campaign=quickbooks_master_sync&utm_content=readme_guide)
+<p align="center">Move QuickBooks Online master data and opening balances into ERPNext, then compare customer and supplier balances before go-live.</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Frappe-v15%20%7C%20v16-2490EF?style=flat-square" alt="Frappe v15 and v16">
+  <img src="https://img.shields.io/badge/ERPNext-v15%20%7C%20v16-0089FF?style=flat-square" alt="ERPNext v15 and v16">
+  <img src="https://img.shields.io/badge/QuickBooks-Online-2CA01C?style=flat-square&amp;logo=quickbooks&amp;logoColor=white" alt="QuickBooks Online">
+  <img src="https://img.shields.io/badge/License-MIT-0B4654?style=flat-square" alt="MIT License">
+</p>
+
+<p align="center">
+  <a href="https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync"><img src="https://img.shields.io/badge/Install_the_free_app-0B4654?style=for-the-badge&amp;logo=frappe&amp;logoColor=white" alt="Install the free app"></a>
+  <a href="https://invento-software-limited.github.io/quickbooks_master_sync/"><img src="https://img.shields.io/badge/Documentation-2490EF?style=for-the-badge&amp;logo=readthedocs&amp;logoColor=white" alt="Documentation"></a>
+  <a href="https://invento.com.bd/quickbooks-to-erpnext-migration/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=quickbooks_master_sync&amp;utm_content=readme_guide"><img src="https://img.shields.io/badge/Migration_guide-2CA01C?style=for-the-badge&amp;logo=quickbooks&amp;logoColor=white" alt="Migration guide"></a>
+</p>
+
+<p align="center">
+  <a href="https://invento.com.bd/quickbooks-to-erpnext-migration/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=quickbooks_master_sync&amp;utm_content=readme_guide"><img src="docs/images/quickbooks-to-erpnext-overview.webp" alt="QuickBooks Online to ERPNext migration: connect, move and verify" width="100%"></a>
+</p>
+
+## See the result before go-live
 
 ![QuickBooks Balance Comparison showing matching supplier balances alongside account-category differences in sandbox data](docs/images/balance-comparison.webp)
 
@@ -10,9 +31,9 @@ Move QuickBooks Online master data and opening balances into ERPNext, then compa
 
 ## Connect, move, verify
 
-1. **Connect** your QuickBooks Online company through Intuit OAuth 2.0.
-2. **Move** master records and opening balances into ERPNext through a manually started background job.
-3. **Verify** customer and supplier balances, review logs and resolve differences before go-live.
+| 1. Connect | 2. Move | 3. Verify |
+| --- | --- | --- |
+| Authorize QuickBooks Online through Intuit OAuth 2.0. | Start a background job to import master records and opening balances. | Compare customer and supplier balances, review logs and resolve differences before go-live. |
 
 Live progress reports the current run. The public app does not enable scheduled synchronization or push ERPNext changes back to QuickBooks. QuickBooks Desktop company files require a different migration route.
 
@@ -105,7 +126,12 @@ See the [full user guide](docs/user_guide.md) for the callback, setup checks, tr
 
 ## Choose your next step
 
-[**Install the free app**](https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync) · [**Discuss your migration**](https://invento.com.bd/free-consultation/?utm_source=github&utm_medium=referral&utm_campaign=quickbooks_master_sync&utm_content=readme_enquiry) · [Read the migration guide](https://invento.com.bd/quickbooks-to-erpnext-migration/?utm_source=github&utm_medium=referral&utm_campaign=quickbooks_master_sync&utm_content=readme_resources)
+<p align="center">
+  <a href="https://cloud.frappe.io/marketplace/apps/quickbooks_master_sync"><img src="https://img.shields.io/badge/Install_the_free_app-0B4654?style=for-the-badge&amp;logo=frappe&amp;logoColor=white" alt="Install the free app"></a>
+  <a href="https://invento.com.bd/free-consultation/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=quickbooks_master_sync&amp;utm_content=readme_enquiry"><img src="https://img.shields.io/badge/Discuss_your_migration-2CA01C?style=for-the-badge" alt="Discuss your migration"></a>
+</p>
+
+[Read the migration guide](https://invento.com.bd/quickbooks-to-erpnext-migration/?utm_source=github&utm_medium=referral&utm_campaign=quickbooks_master_sync&utm_content=readme_guide)
 
 ## Contributing and licence
 
